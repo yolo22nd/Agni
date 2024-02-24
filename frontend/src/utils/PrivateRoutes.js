@@ -6,8 +6,13 @@ const PrivateRoutes = (children, ...rest) => {
     let {user} = useContext(AuthContext)
     // console.log("privvate route works")
     return(
+<<<<<<< HEAD
         // user ? <Outlet/> : <Navigate to="/login" />
         user ? <Outlet/> : <Outlet />
+=======
+        user ? <Outlet/> : <Navigate to="/login" />
+        // user ? <Outlet/> : <Outlet/>
+>>>>>>> abe456b8597f7f6a820990c26193900bebb30d50
     )
 }
 
