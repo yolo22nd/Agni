@@ -94,7 +94,7 @@ const Loginpage = () => {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 autoComplete="email"
                 required
                 onChange={(e) => setUsername(e.target.value)}
