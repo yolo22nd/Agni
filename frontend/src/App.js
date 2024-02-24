@@ -9,12 +9,10 @@ import Userpage from "./pages/Userpage"
 import Registerpage from "./pages/Registerpage"
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Committee from "./pages/Committee";
-import SaveBanner from './components/SaveBanner'
 
-
-import Header from './components/Header';
 
 import { AuthProvider } from './context/AuthContext';
+import Faculty from './pages/Faculty';
 
 
 function App() {
@@ -29,6 +27,7 @@ function App() {
                 <Route exact path='/saved' element={<Userpage/>}/>
                 <Route path="/create/:id"  element={<Createpage/>}/>
                 <Route path='/committee' element={<Committee/>}/>
+                <Route path='/faculty' element={<Faculty/>}/>
               </Route>
               {/* <Route path="/" element={<PrivateRoute Component={Homepage} />} /> */}
               {/* <PrivateRoute Component={Homepage} path='/' exact/>   */}
