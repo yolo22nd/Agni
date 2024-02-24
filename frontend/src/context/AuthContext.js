@@ -34,7 +34,8 @@ export const AuthProvider = ({children}) => {
             setUser(jwtDecode(data.access))
 
             localStorage.setItem('authTokens',JSON.stringify(data))
-            console.log(user)
+            // console.log(authTokens)
+            // console.log(user)
             navigate('/')
         }else{
             alert("something went wrong?")
@@ -62,8 +63,8 @@ export const AuthProvider = ({children}) => {
     }
 
 
-    let updateToken = async(e) => {
-        setLoading(true)  // Set loading to true at the start of the function
+    let updateToken = async() => {
+        // setLoading(true)  // Set loading to true at the start of the function
         console.log("update token called")
         let response = await fetch('http://127.0.0.1:8000/api/token/refresh/',{
             method:'POST',
@@ -82,12 +83,14 @@ export const AuthProvider = ({children}) => {
         }else{
             logOutUser()
         }
-        setLoading(false)  // Set loading back to false once the update is complete
-    }
+        if(loading){
+            setLoading(false)
+        }    }
 
 
 
     let logOutUser = () => {
+        console.log("logout called")
         setAuthTokens(null)
         setUser(null)
         localStorage.removeItem("authTokens")
@@ -115,9 +118,11 @@ export const AuthProvider = ({children}) => {
             }
         }, halfMinute)
 
+        // console.log(authTokens);
+        // console.log(user);
         return ()=> clearInterval(interval)
 
-    }, [authTokens, loading])
+    }, [authTokens, user, loading])
 
     return(
         // <AuthContext.Provider value={{'name':'admin'}}>

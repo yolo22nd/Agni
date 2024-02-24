@@ -7,6 +7,7 @@ const PrivateRoutes = (children, ...rest) => {
     // console.log("privvate route works")
     return(
         user ? <Outlet/> : <Navigate to="/login" />
+        // user ? <Outlet/> : <Outlet/>
     )
 }
 
