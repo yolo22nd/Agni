@@ -14,14 +14,15 @@ const Loginpage = () => {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8 bg-gradient-to-bl from-indigo-950 to-cyan-800 h-screen">
+      <div className="bg-white bg-opacity-10 sm:w-full sm:max-w-sm p-4 px-8 rounded-xl" style={{boxShadow:'#1e1f4e 6px 6px 10px'}}>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
+        {/* <img
           className="mx-auto h-10 w-auto"
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
           alt="Your Company"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        /> */}
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
           Sign in to your account
         </h2>
       </div>
@@ -31,7 +32,7 @@ const Loginpage = () => {
           <div>
             <label
               htmlFor="userType"
-              className="block text-left text-md font-medium leading-6 text-gray-900"
+              className="block text-left text-md font-medium leading-6 text-white"
             >
               Sign in as
             </label>
@@ -46,7 +47,7 @@ const Loginpage = () => {
                 />
                 <label
                   htmlFor="faculty"
-                  className="text-left text-sm leading-6 text-gray-900 pl-1"
+                  className="text-left text-sm leading-6 text-white pl-1"
                 >
                   Faculty
                 </label>
@@ -61,7 +62,7 @@ const Loginpage = () => {
                 />
                 <label
                   htmlFor="committee"
-                  className="text-left text-sm leading-6 text-gray-900 pl-1"
+                  className="text-left text-sm leading-6 text-white pl-1"
                 >
                   Committee
                 </label>
@@ -76,7 +77,7 @@ const Loginpage = () => {
                 />
                 <label
                   htmlFor="student"
-                  className="text-left text-sm leading-6 text-gray-900 pl-1"
+                  className="text-left text-sm leading-6 text-white pl-1"
                 >
                   Student
                 </label>
@@ -86,7 +87,7 @@ const Loginpage = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-left text-sm font-medium leading-6 text-gray-900"
+              className="block text-left text-sm font-medium leading-6 text-white"
             >
               Email address
             </label>
@@ -98,7 +99,7 @@ const Loginpage = () => {
                 autoComplete="email"
                 required
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -107,14 +108,14 @@ const Loginpage = () => {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-white"
               >
                 Password
               </label>
               <div className="text-sm">
                 <a
                   href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  className="font-semibold text-indigo-300 hover:text-indigo-500"
                 >
                   Forgot password?
                 </a>
@@ -128,7 +129,7 @@ const Loginpage = () => {
                 autoComplete="current-password"
                 required
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -143,16 +144,17 @@ const Loginpage = () => {
           </div>
         </form>
 
-        <p className="mt-10 text-center text-sm text-gray-500">
+        <p className="mt-10 text-center text-sm text-gray-200">
           Don't have an account?
           <Link
             to="/register"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            className="font-semibold leading-6 text-indigo-300 hover:text-indigo-500"
           >
             {" "}
             Register here
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

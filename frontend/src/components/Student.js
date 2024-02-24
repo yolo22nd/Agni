@@ -34,8 +34,9 @@ const Student = () => {
   return (
     <>
     <Header/>
-    <div className='w-full h-screen  bg-gray-900 z-5 pt-16'>
-        <h1 className='text-center text-white p-4 text-5xl font-bold'>Upcoming events</h1>
+    <div className='w-full h-screen  bg-gradient-to-br from-cyan-800 to-indigo-950 z-5 pt-16'>
+        <div className='text-center text-white p-4 text-5xl font-bold '>Upcoming events</div>
+        <div className='border-b-4 border-slate-300 mb-6 mx-32'></div>
     <div className='max-w-screen-2xl mx-auto'>
     <Slider {...settings} position='fixed'>
       <div >
@@ -59,10 +60,10 @@ const Student = () => {
     </Slider>
       </div>
       </div>
-      <div className='flex w-full bg-slate-900'>
+      <div className='flex w-full bg-gradient-to-bl from-indigo-950 to-cyan-800'>
       <div className='p-8  flex flex-col pt-16' style={{width:'70%'}}>
         <div className='mb-6'>
-        <h1 className='text-center text-white p-4 text-5xl font-bold'>Events</h1>
+        <h1 className='text-center text-white p-4 text-5xl font-bold border-b-4 border-slate-300 mb-4'>Events</h1>
         </div>
         <div className='flex flex-row flex-wrap gap-16 md:gap-x-48 gap-y-16 justify-center items-center '>
       

@@ -1,12 +1,13 @@
 import {React,useState} from 'react'
 
 const Venue = () => {
-    const [selectedValue, setSelectedValue] = useState('');
+    const [selectedValue, setSelectedValue] = useState('1');
 
     // Function to handle change in selected value
     const handleChange = (event) => {
       setSelectedValue(event.target.value);
     };
+    
     const occupiedStyle={
         background:"rgb(229 231 235 )"
     }
@@ -15,8 +16,9 @@ const Venue = () => {
         border:'2px solid rgb(229 231 235 )',
         cursor:'pointer',
     }
-  return (
-    <div className='w-full h-16 bg-slate-900'>
+    return (
+        <div className='w-full h-16 bg-slate-900'>
+        <style></style>
         <label htmlFor="floor" className='text-white mt-4'>Select floor :&nbsp;&nbsp;</label>
       <select value={selectedValue} onChange={handleChange} className='mt-4 px-4 py-2 rounded-2xl'>
         <option value="1" className='px-2 py-2 text-xl'>Floor 1</option>
