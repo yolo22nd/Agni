@@ -20,7 +20,10 @@ from base.models import *
 class createEvent(APIView):
     def post(self, request):
         serializer = EventsSerializer(data=request.data)
-        event = request.data.get('name')
+        serializer.committee=Committee.objects.filter(name=request.data["committee_name"])
+        serializer.venue=Venue.objects.filter(name=request.data["venue_name"])
+
+        event_name = request.data.get('name')
         if serializer.is_valid():
             try:
                 serializer.save()
@@ -28,10 +31,10 @@ class createEvent(APIView):
                 hod = Faculty.objects.get(is_hod=True)
                 mentor = Faculty.objects.get(is_mentor=True)
                 dean = Faculty.objects.get(is_dean=True)
-                email_send(principle.email, principle.fac_id, event, request.data)
-                email_send(hod.email, hod.fac_id, event, request.data)
-                email_send(mentor.email, mentor.fac_id, event, request.data)
-                email_send(dean.email, dean.fac_id, event, request.data)
+                email_send(principle.email, principle.fac_id, event_name, request.data)
+                email_send(hod.email, hod.fac_id, event_name, request.data)
+                email_send(mentor.email, mentor.fac_id, event_name, request.data)
+                email_send(dean.email, dean.fac_id, event_name, request.data)
                 return Response({'message' : "Event booked successfully"})
             except Exception as e:
                 print(f'errors : {e}')
@@ -40,9 +43,9 @@ class createEvent(APIView):
 
 
 # Sending approval email
-def email_send(email, fac_id, event, event_data):
+def email_send(email, fac_id, event_name, event_data):
     subject = 'click the link to approve the event'
-    message = f'{event_data}\nClick on the link to approve this event http://127.0.0.1:8000/events/approval/{event}/{fac_id}/'
+    message = f'{event_data}\nClick on the link to approve this event http://127.0.0.1:8000/events/approval/{event_name}/{fac_id}/'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email]
     send_mail(subject, message, email_from, recipient_list)

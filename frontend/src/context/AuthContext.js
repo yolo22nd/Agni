@@ -116,7 +116,7 @@ export const AuthProvider = ({children}) => {
             if (authTokens) {
                 updateToken()
             }
-        }, halfMinute)
+        }, fourMinutes)
 
         // console.log(authTokens);
         // console.log(user);
