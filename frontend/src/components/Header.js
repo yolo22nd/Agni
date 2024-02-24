@@ -8,7 +8,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';import { style
 
 function SidebarContent() {
   return (
-    <div className="bg-slate-900 text-white w-64 h-screen fixed top-0 left-0 z-4">
+    <div className="bg-slate-900 text-white w-64 h-screen fixed top-0 left-0 z-8">
       <ul className='mt-12'>
         <li className='p-4'>Profile</li>
         <li className='p-4'>Events</li>
@@ -51,7 +51,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static" style={{backgroundColor:'black'}}>
+    <AppBar position="fixed" style={{backgroundColor:'black'}}>
       <Toolbar>
       {/* <MenuOutlinedIcon className='mr-4 cursor-pointer'/> */}
       <Sidebar className="z-100"/>
