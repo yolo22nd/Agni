@@ -66,13 +66,13 @@ const Header = () => {
         {user && <Typography variant="h6">Hello {user.username} !</Typography>}
         <Box sx={{ flexGrow: 0.58 }} />
         <SearchOutlinedIcon fontSize='medium'/>
-        <Box className="search px-4 py-2">
+        <Box className="search px-2 py-1">
         <input
           type="text"
           placeholder="Search here"
           onChange={handleChange}
           value={searchInput} 
-          className='p-2 rounded-full text-black-100 bg-slate-600'
+          className='px-4 py-2 rounded-full text-black-100 bg-slate-600'
           />
       </Box>
         {user ? (
