@@ -47,7 +47,7 @@ const Homepage = () => {
           </StyledPaper>
         </Grid>
       </Grid> */}
-      <Student/>
+      {/* <Student/> */}
     </div>
   );
 };

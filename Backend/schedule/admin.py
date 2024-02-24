@@ -5,15 +5,15 @@ from .models import *
 
 
 class VenueAdmin(admin.ModelAdmin):
-    list_display = ['name', 'capacity', 'address'] 
+    list_display = ['name', 'capacity', 'address', 'is_available', 'image'] 
 
 
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['is_available', 'is_approved_all', 'venue', 'committee', 'date'] 
+    list_display = ['is_approved_all', 'venue', 'committee', 'date'] 
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'committee', 'booking', 'venue', 'date', 'time'] 
+    list_display = ['name', 'committee', 'booking', 'venue', 'date', 'time', 'image'] 
 
 
 admin.site.register(Venue, VenueAdmin)

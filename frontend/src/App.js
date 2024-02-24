@@ -13,6 +13,7 @@ import Committee from "./pages/Committee";
 
 import { AuthProvider } from './context/AuthContext';
 import Faculty from './pages/Faculty';
+import Student from './components/Student';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/create/:id"  element={<Createpage/>}/>
                 <Route path='/committee' element={<Committee/>}/>
                 <Route path='/faculty' element={<Faculty/>}/>
+                <Route path='/student' element={<Student/>}/>
               </Route>
               {/* <Route path="/" element={<PrivateRoute Component={Homepage} />} /> */}
               {/* <PrivateRoute Component={Homepage} path='/' exact/>   */}
