@@ -21,7 +21,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
           <AuthProvider>  
-              <p className='bg-red-300'> hello</p>
             <Routes>
               <Route element={<PrivateRoutes/>}>
                 <Route exact path='/' element={<Homepage/>}/>

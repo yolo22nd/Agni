@@ -5,6 +5,7 @@ import { styled } from '@mui/system';
 import AuthContext from '../context/AuthContext';
 import Header from '../components/Header';
 import SaveBanner from '../components/SaveBanner';
+import Student from '../components/Student';
 
 const StyledPaper = styled(Paper)({
   height: 'calc(100vh - 64px)', // Subtracting the height of the Header
@@ -34,7 +35,7 @@ const Homepage = () => {
     <div>
       {saved ? "" : <SaveBanner />}
       <Header />
-      <Grid container spacing={0}>
+      {/* <Grid container spacing={0}>
         <Grid item xs={6}>
           <StyledPaper onClick={handleMemeClick}>
             <Typography variant="h4">Memes</Typography>
@@ -45,7 +46,8 @@ const Homepage = () => {
             <Typography variant="h4">Saved</Typography>
           </StyledPaper>
         </Grid>
-      </Grid>
+      </Grid> */}
+      <Student/>
     </div>
   );
 };
