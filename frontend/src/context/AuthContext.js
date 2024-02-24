@@ -56,7 +56,7 @@ export const AuthProvider = ({children}) => {
 
         if(response.status ===201){
             console.log("User registered successfully")
-            navigate('/login')
+            // navigate('/login')
         }else{
             alert("Something went wrong while Registering")
         }
