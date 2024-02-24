@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 
 
+# class User(models.)
+
 class Committee(models.Model):
     name = models.CharField(max_length=100, unique=True)
     department = models.CharField(max_length=200)

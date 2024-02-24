@@ -22,6 +22,7 @@ class Booking(models.Model):
     is_approved_hod = models.BooleanField(default=False)
 
 
+
 class Event(models.Model):
     ENTERTAINMENT = 'entertainment'
     EDUCATION = 'education'
