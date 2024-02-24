@@ -38,7 +38,7 @@ export const AuthProvider = ({children}) => {
             // console.log(user)
             navigate('/')
         }else{
-            alert("something went wrong?")
+            alert("Invalid Credentials")
         }
     }
 
@@ -58,7 +58,7 @@ export const AuthProvider = ({children}) => {
             console.log("User registered successfully")
             navigate('/login')
         }else{
-            alert("something went wrong?")
+            alert("Something went wrong while Registering")
         }
     }
 

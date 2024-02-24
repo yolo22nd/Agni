@@ -1,18 +1,7 @@
 import React, { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
-import { Button, TextField, Grid, Paper, Typography, Link } from '@mui/material';
-import { styled } from '@mui/system';
+import { Link } from 'react-router-dom'; 
 
-const StyledPaper = styled(Paper)({
-  padding: 20,
-  height: '50vh',
-  width: 280,
-  margin: '20px auto',
-});
-
-const StyledButton = styled(Button)({
-  marginTop: 20,
-});
 
 const RegisterPage = () => {
     const { registerUser } = useContext(AuthContext);  // Get the registerUser function from context
@@ -26,28 +15,84 @@ const RegisterPage = () => {
     };
 
     return (
-        <Grid>
-            <StyledPaper elevation={10}>
-                <Grid align='center'>
-                    <Typography variant='h4' color='primary'>
-                        Register
-                    </Typography>
-                </Grid>
-                <form onSubmit={handleSubmit}>
-                    <TextField label='Username' placeholder='Enter username' fullWidth required onChange={(e) => setUsername(e.target.value)} />
-                    <TextField label='Password' placeholder='Enter password' type='password' fullWidth required onChange={(e) => setPassword(e.target.value)} />
-                    <StyledButton type='submit' color='primary' variant='contained' fullWidth>
-                        Register
-                    </StyledButton>
-                </form>
-                <Typography>
-                    <br />
-                    <Link href="/login">
-                        Already have an account? Login
-                    </Link>
-                </Typography>
-            </StyledPaper>
-        </Grid>
+        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          className="mx-auto h-10 w-auto"
+          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+          alt="Your Company"
+        />
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Register your account
+        </h2>
+      </div>
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" onSubmit={handleSubmit} method="POST">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-left text-sm font-medium leading-6 text-gray-900"
+            >
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                onChange={(e) => setUsername(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Password
+              </label>
+            </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-2 pr-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Register
+            </button>
+          </div>
+        </form>
+
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Already have an account?
+          <Link
+            to="/login"
+            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >
+            {" "}
+            Sign in here
+          </Link>
+        </p>
+      </div>
+    </div>
     );
 };
 
