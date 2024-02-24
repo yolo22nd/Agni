@@ -8,6 +8,7 @@ import Memepage from "./pages/Memepage"
 import Userpage from "./pages/Userpage"
 import Registerpage from "./pages/Registerpage"
 import PrivateRoutes from "./utils/PrivateRoutes";
+import Committee from "./pages/Committee";
 import SaveBanner from './components/SaveBanner'
 
 
@@ -27,6 +28,7 @@ function App() {
                 <Route exact path='/memes' element={<Memepage/>}/>
                 <Route exact path='/saved' element={<Userpage/>}/>
                 <Route path="/create/:id"  element={<Createpage/>}/>
+                <Route path='/committee' element={<Committee/>}/>
               </Route>
               {/* <Route path="/" element={<PrivateRoute Component={Homepage} />} /> */}
               {/* <PrivateRoute Component={Homepage} path='/' exact/>   */}
