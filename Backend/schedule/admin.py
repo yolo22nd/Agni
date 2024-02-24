@@ -16,6 +16,6 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'committee', 'booking', 'venue', 'date', 'time', 'image'] 
 
 
-admin.site.register(Venue, VenueAdmin)
-admin.site.register(Booking, BookingAdmin)
-admin.site.register(Event, EventAdmin)
+admin.site.register(Venue)
+admin.site.register(Booking)
+admin.site.register(Event)

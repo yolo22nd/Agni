@@ -27,21 +27,28 @@ export const AuthProvider = ({children}) => {
         })
         let data = await response.json()
         console.log('data:', data)
-        // console.log('response:', response)
-
+    
         if(response.status ===200){
             setAuthTokens(data)
-            setUser(jwtDecode(data.access))
-
+            let user = jwtDecode(data.access)
+            setUser(user)
+    
             localStorage.setItem('authTokens',JSON.stringify(data))
-            // console.log(authTokens)
-            // console.log(user)
-            navigate('/')
-        }else{
+    
+            if (user.is_student) {
+                navigate('/student')
+            } else if (user.is_faculty) {
+                navigate('/faculty')
+            } else if (user.is_committee) {
+                navigate("/committee")
+            } else {
+                console.error('User type not recognized', user);
+            }
+        } else {
             alert("Invalid Credentials")
         }
     }
-
+    
     let registerUser = async (username, password) => {
         console.log("form submitted")
         let response = await fetch('http://127.0.0.1:8000/api/register/',{

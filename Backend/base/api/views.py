@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from base.models import Student, Faculty, Committee
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -16,10 +17,18 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
+        # Add standard claims
         token['username'] = user.username
 
-        return token
+        # Add custom claims
+        if hasattr(user, 'student'):
+            token['is_student'] = True
+        if hasattr(user, 'faculty'):
+            token['is_faculty'] = True
+        if hasattr(user, 'committee'):
+            token['is_committee'] = True
 
+        return token
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -69,7 +78,71 @@ def registerUser(request):
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.create_user(username, password=password)
+        user = Student.objects.create(username, password=password)
         user.save()
 
         return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['POST'])
+def registerCommittee(request):
+    if request.method == 'POST':
+        name = request.data.get('name')
+        department = request.data.get('department')
+        email = request.data.get('email')
+        desc = request.data.get('desc')
+
+        if not name or not department or not email or not desc:
+            return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if Committee.objects.filter(name=name).exists():
+            return Response({'error': 'Committee already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        committee = Committee.objects.create(name=name, department=department, email=email, desc=desc)
+        committee.save()
+
+        return Response({'message': 'Committee created successfully'}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def registerStudent(request):
+    if request.method == 'POST':
+        name = request.data.get('name')
+        department = request.data.get('department')
+        email = request.data.get('email')
+        rollno = request.data.get('rollno')
+        ac_year = request.data.get('ac_year')
+
+        if not name or not department or not email or not rollno or not ac_year:
+            return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if Student.objects.filter(rollno=rollno).exists():
+            return Response({'error': 'Student already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        student = Student.objects.create(name=name, department=department, email=email, rollno=rollno, ac_year=ac_year)
+        student.save()
+
+        return Response({'message': 'Student created successfully'}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def registerFaculty(request):
+    if request.method == 'POST':
+        name = request.data.get('name')
+        department = request.data.get('department')
+        email = request.data.get('email')
+        fac_id = request.data.get('fac_id')
+        is_principle = request.data.get('is_principle')
+        is_hod = request.data.get('is_hod')
+        is_mentor = request.data.get('is_mentor')
+        is_dean = request.data.get('is_dean')
+
+        if not name or not department or not email or not fac_id or not is_principle or not is_hod or not is_mentor or not is_dean:
+            return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if Faculty.objects.filter(fac_id=fac_id).exists():
+            return Response({'error': 'Faculty already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        faculty = Faculty.objects.create(name=name, department=department, email=email, fac_id=fac_id, is_principle=is_principle, is_hod=is_hod, is_mentor=is_mentor, is_dean=is_dean)
+        faculty.save()
+
+        return Response({'message': 'Faculty created successfully'}, status=status.HTTP_201_CREATED)

@@ -19,9 +19,14 @@ from base.models import *
 
 class createEvent(APIView):
     def post(self, request):
+        data = request.data.copy()
+        # data['user'] = user.id  # Add the user id to the data
+
+        # data["committee"]=Committee.objects.filter(name=request.data["committee_name"])
+        # del data["committee_name"]
+        # data["venue"]=Venue.objects.filter(name=request.data["venue_name"])
+        # del data["venue_name"]
         serializer = EventsSerializer(data=request.data)
-        serializer.committee=Committee.objects.filter(name=request.data["committee_name"])
-        serializer.venue=Venue.objects.filter(name=request.data["venue_name"])
 
         event_name = request.data.get('name')
         if serializer.is_valid():
@@ -31,11 +36,11 @@ class createEvent(APIView):
                 hod = Faculty.objects.get(is_hod=True)
                 mentor = Faculty.objects.get(is_mentor=True)
                 dean = Faculty.objects.get(is_dean=True)
+                return Response({'message' : "Event booked successfully"})
                 email_send(principle.email, principle.fac_id, event_name, request.data)
                 email_send(hod.email, hod.fac_id, event_name, request.data)
                 email_send(mentor.email, mentor.fac_id, event_name, request.data)
                 email_send(dean.email, dean.fac_id, event_name, request.data)
-                return Response({'message' : "Event booked successfully"})
             except Exception as e:
                 print(f'errors : {e}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -89,5 +94,8 @@ def email_approval(request, event, fac_id):
     #     user_obj.save()
     #     print(user_obj)
     #     return JsonResponse({'message' : 'verified'})
+        
+
+        #add condition for all approve and set it true
     return JsonResponse({'message' : 'Event is already approved'})
 

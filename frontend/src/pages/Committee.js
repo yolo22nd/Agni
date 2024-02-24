@@ -37,14 +37,15 @@ function Committee() {
     setOpenModal2(true);
   }
   function handleSubmit (e) {
-    e.preventDefault();
-    try {
-      let res = axios.post('//',
+    // e.preventDefault();
+    // try {
+    //   let res = axios.post('//',
 
-      )
-    } catch (e) {
-      console.error(e)
-    }
+    //   )
+    // } catch (e) {
+    //   console.error(e)
+    // }
+    console.log("form submitted")
   }
 
   let events = [

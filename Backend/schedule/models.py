@@ -10,6 +10,7 @@ class Venue(models.Model):
     address = models.TextField(max_length=500)
     is_available = models.BooleanField(default=True)
     image = models.CharField(max_length=10000)
+    
     # event = models.ForeignKey('Event', on_delete=models.CASCADE, null=False, blank=False)
 
 

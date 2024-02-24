@@ -7,7 +7,9 @@ import Createpage from "./pages/Createpage"
 import Memepage from "./pages/Memepage"
 import Userpage from "./pages/Userpage"
 import Registerpage from "./pages/Registerpage"
-import PrivateRoutes from "./utils/PrivateRoutes";
+import StudentRoutes from "./utils/StudentRoutes";
+import FacultyRoutes from "./utils/FacultyRoutes";
+import CommitteeRoutes from "./utils/CommitteeRoutes";
 import Committee from "./pages/Committee";
 
 
@@ -23,16 +25,22 @@ function App() {
       <BrowserRouter>
           <AuthProvider>  
             <Routes>
-              <Route element={<PrivateRoutes/>}>
-                <Route exact path='/' element={<Homepage/>}/>
-                <Route exact path='/memes' element={<Memepage/>}/>
-                <Route exact path='/saved' element={<Userpage/>}/>
+              <Route element={<StudentRoutes/>}>
+                <Route path='/student' element={<Student/>}/>
+              </Route>
+
+              <Route element={<CommitteeRoutes/>}>
                 <Route path="/create/:id"  element={<Createpage/>}/>
                 <Route path='/committee' element={<Committee/>}/>
-                <Route path='/faculty' element={<Faculty/>}/>
-                <Route path='/student' element={<Student/>}/>
                 <Route path='/venue' element={<Venue/>}/>
               </Route>
+              <Route element={<FacultyRoutes/>}>
+                <Route path='/Faculty' element={<Faculty/>}/>
+
+              </Route>
+                {/* <Route exact path='/' element={<Homepage/>}/>
+                <Route exact path='/memes' element={<Memepage/>}/>
+                <Route exact path='/saved' element={<Userpage/>}/> */}
               {/* <Route path="/" element={<PrivateRoute Component={Homepage} />} /> */}
               {/* <PrivateRoute Component={Homepage} path='/' exact/>   */}
               <Route element={<Loginpage/>} path='/login'/>  
