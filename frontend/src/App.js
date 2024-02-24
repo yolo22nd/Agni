@@ -15,6 +15,7 @@ import SaveBanner from './components/SaveBanner'
 import Header from './components/Header';
 
 import { AuthProvider } from './context/AuthContext';
+import Student from './components/Student';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 <Route exact path='/saved' element={<Userpage/>}/>
                 <Route path="/create/:id"  element={<Createpage/>}/>
                 <Route path='/committee' element={<Committee/>}/>
+                <Route path='/student' element={<Student/>}/>
               </Route>
               {/* <Route path="/" element={<PrivateRoute Component={Homepage} />} /> */}
               {/* <PrivateRoute Component={Homepage} path='/' exact/>   */}

@@ -4,7 +4,8 @@ import AuthContext from '../context/AuthContext';
 import { AppBar, Toolbar, Typography, Button, Box ,TextField} from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';import { styled } from '@mui/system';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { styled } from '@mui/system';
 
 function SidebarContent() {
   return (
