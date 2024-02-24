@@ -18,4 +18,4 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Booking, BookingAdmin)
-# admin.site.register(Event, EventAdmin)
+admin.site.register(Event, EventAdmin)
