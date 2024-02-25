@@ -27,7 +27,7 @@ const Venue = () => {
       {selectedValue==='1' && 
         <div className='mt-8 mx-4 mb-2 p-2'>
             <div class="grid grid-cols-12 grid-rows-12 gap-4">
-            <div class="p-16 col-span-2 row-span-3" style={{...occupiedStyle}} id='1'>Room 1</div>
+            <div class="p-16 col-span-2 row-span-3" style={{ ...occupiedStyle, ":hover": { background: "green" } }} id='1'>Room 1</div>
             <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='2'>Room 2</div>
             <div style={{...occupiedStyle}} class=" p-16 row-span-3" id=''>Room 1</div>
             <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='3'>Room 3</div>

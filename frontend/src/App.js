@@ -11,7 +11,8 @@ import StudentRoutes from "./utils/StudentRoutes";
 import FacultyRoutes from "./utils/FacultyRoutes";
 import CommitteeRoutes from "./utils/CommitteeRoutes";
 import Committee from "./pages/Committee";
-
+import Buy from './components/Buy';
+import DisplayRazorPay from './components/DisplayRazorPay';
 
 import { AuthProvider } from './context/AuthContext';
 import Faculty from './pages/Faculty';
@@ -38,6 +39,10 @@ function App() {
                 <Route path='/Faculty' element={<Faculty/>}/>
 
               </Route>
+
+                <Route exact path='/pay' element={<DisplayRazorPay/>}/>
+
+                <Route path="/buy/:id"  element={<Buy/>}/>
                 {/* <Route exact path='/' element={<Homepage/>}/>
                 <Route exact path='/memes' element={<Memepage/>}/>
                 <Route exact path='/saved' element={<Userpage/>}/> */}
