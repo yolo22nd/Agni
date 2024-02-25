@@ -180,9 +180,10 @@ function Committee() {
     setRender(true);
   }, []);
   return (
-    <div className="bg-gradient-to-br from-cyan-800 to-indigo-950 h-max">
+    <div className="h-max">
         <Header />
-        <div className="max-w-[1300px] mx-auto flex justify-end text-white mt-8">
+        <div className="relative top-12 bg-gradient-to-br from-cyan-800 to-indigo-950 h-max pt-4">
+        <div className="max-w-[1300px] mx-auto flex justify-end text-white mt-8 relative">
           <div
             className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 hover:cursor-pointer bg-green-700 hover:bg-green-800"
             onClick={() => setOpenModal(true)}
@@ -365,6 +366,7 @@ function Committee() {
                 </div>
               );
             })}
+        </div>
         </div>
     </div>
   );

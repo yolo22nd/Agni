@@ -70,8 +70,9 @@ function Faculty() {
           },
     ]
   return (
-    <div className="bg-gradient-to-br from-cyan-800 to-indigo-950 h-max pb-5">
+    <div className="h-max">
         <Header/>
+        <div className='relative top-12 bg-gradient-to-br from-cyan-800 to-indigo-950 h-max pt-4 pb-5'>
         <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
           <h1>Pending Requests</h1>
         </div>
@@ -147,6 +148,7 @@ function Faculty() {
                     </div>
                 );
             })}
+        </div>
         </div>
     </div>
   )
