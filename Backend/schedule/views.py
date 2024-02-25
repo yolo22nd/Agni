@@ -104,36 +104,18 @@ def email_approval(request, event, fac_id):
             booking.is_approved_dean = True
             booking.save()
             return JsonResponse({'message' : 'Approved by dean'})
+    
+    # if not faculty_obj.is_verified:
+    #     user_obj.is_verified = True
+    #     user_obj.save()
+    #     print(user_obj)
+    #     return JsonResponse({'message' : 'verified'})
         
+
+        #add condition for all approve and set it true
     return JsonResponse({'message' : 'Event is already approved'})
 
 
-class Registration(APIView):
-    def post(self, request):
-        try:
-            new_member_rollno = request.data.get('rollno')
-            event_id = request.data.get('event_id')
-            event_obj = Event.objects.get(id=event_id)
-            student_obj = Student.objects.get(rollno=new_member_rollno)
-            existing_members = event_obj.regi_members
-
-            if existing_members:
-                updated_members = f"{existing_members}, {new_member_rollno}"
-            else:
-                updated_members = new_member_rollno
-
-            event_obj.regi_members = updated_members
-            event_obj.save()
-            subject = f'{event_obj.name} Registration'
-            message = f'You are registered for {event_obj.name} successfully\nFollowing are the details of the event\n{event_obj}'
-            student_email = student_obj.email
-            email_from = settings.EMAIL_HOST_USER
-            send_mail(subject, message, email_from, [student_email])
-            return JsonResponse({'message': 'Member registered successfully'}, status=status.HTTP_201_CREATED)
-        except Event.DoesNotExist:
-            return JsonResponse({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class DisplayEventStudent(viewsets.ModelViewSet):
