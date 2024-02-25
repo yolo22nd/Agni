@@ -52,7 +52,6 @@ function Committee() {
 
   const createEvent = async () => {
     try {
-      setRender(false);
       setLoading(true);
       console.log(name, type, date, time, desc, img, "...", user.name);
       let res = await axios.post('http://127.0.0.1:8000/events/',
@@ -60,7 +59,9 @@ function Committee() {
       { headers: { 'Content-Type': 'application/json'}})
       console.log(res);
       setLoading(false);
+      setRender(false);
       setRender(true);
+      handlePopupClose();
       setTimeout(() => {
         getEventData();
       }, 300)
@@ -163,6 +164,7 @@ function Committee() {
                     >
                       <option value="Select" selected disabled>Select</option>
                       <option value="education">Education</option>
+                      <option value="entertainment">Entertainment</option>
                     </select>
                   </div>
                 </div>
