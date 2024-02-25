@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -14,8 +12,6 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 function Committee() {
   const [render, setRender] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [openModal2, setOpenModal2] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
   const [name, setName] = useState("");
   const [venue, setVenue] = useState("");
@@ -32,9 +28,6 @@ function Committee() {
     setIsPopupOpen(false);
   };
 
-  function onCloseModal() {
-    setOpenModal(false);
-  }
   function onCloseModal2() {
     setOpenModal2(false);
   }
@@ -289,99 +282,6 @@ function Committee() {
             </div>
           </div>
         )}
-        <Modal
-          className="bg-opacity-70"
-          show={openModal}
-          size="md"
-          onClose={onCloseModal}
-          popup
-        >
-          <Modal.Header className="text-red-400 w-2/6 mx-auto bg-slate-600 font-bold rounded-tl-2xl rounded-tr-2xl" />
-          <Modal.Body className="w-2/6 m-auto bg-slate-600 p-10 rounded-br-2xl rounded-bl-2xl">
-            <div className="space-y-6">
-              <h3 className="text-xl font-medium text-white text-center">
-                Fill up the Event Details
-              </h3>
-              <div>
-                <form onSubmit={(e) => handleSubmit(e)}>
-                  <div className="flex justify-between mb-4">
-                    <div className="w-1/2">
-                      <label
-                        htmlFor="eventName"
-                        className="block font-normal text-slate-200 mb-0.5 pl-1"
-                      >
-                        Event Name
-                      </label>
-                      <input
-                        type="text"
-                        id="eventName"
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        className="p-1 pl-2 pr-2 rounded-lg w-11/12 focus:outline-none"
-                      />
-                    </div>
-                    <div className="w-1/2">
-                      <label
-                        htmlFor="eventDate"
-                        className="block font-normal text-slate-200 mb-0.5 pl-1"
-                      >
-                        Event Date
-                      </label>
-                      <input
-                        type="date"
-                        id="eventDate"
-                        onChange={(e) => setDate(e.target.value)}
-                        required
-                        className="p-1 text-md pb-0.5 pl-2 pr-2 rounded-lg w-full focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full mb-4">
-                    <label
-                      htmlFor="eventDesc"
-                      className="block font-normal text-slate-200 mb-0.5 pl-1"
-                    >
-                      Event Description
-                    </label>
-                    <input
-                      type="text"
-                      id="eventDesc"
-                      onChange={(e) => setDesc(e.target.value)}
-                      required
-                      className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
-                    />
-                  </div>
-                  <div className="flex justify-between mb-8">
-                    <div className="w-full">
-                      <label
-                        htmlFor="eventImg"
-                        className="block font-normal text-slate-200 mb-0.5 pl-1"
-                      >
-                        Image
-                      </label>
-                      <input
-                        type="file"
-                        id="eventImg"
-                        onChange={(e) => handleFile(e)}
-                        accept="image/*"
-                        required
-                        className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <input
-                      type="submit"
-                      value="Check available Venue"
-                      className="bg-green-600 text-white hover:bg-green-700 hover:cursor-pointer p-1 w-full rounded-2xl"
-                    />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </Modal.Body>
-        </Modal>
-
         <Modal
           className="bg-opacity-70"
           show={openModal2}
