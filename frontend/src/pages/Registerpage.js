@@ -15,14 +15,15 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8 bg-gradient-to-bl from-indigo-950 to-cyan-800 h-screen">
+          <div className="bg-white bg-opacity-10 sm:w-full sm:max-w-sm p-4 px-8 rounded-xl" style={{boxShadow:'#1e1f4e 6px 6px 10px'}}>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
           alt="Your Company"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
           Register your account
         </h2>
       </div>
@@ -32,7 +33,7 @@ const RegisterPage = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-left text-sm font-medium leading-6 text-gray-900"
+              className="block text-left text-sm font-medium leading-6 text-white"
             >
               Email address
             </label>
@@ -53,7 +54,7 @@ const RegisterPage = () => {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-white"
               >
                 Password
               </label>
@@ -81,17 +82,18 @@ const RegisterPage = () => {
           </div>
         </form>
 
-        <p className="mt-10 text-center text-sm text-gray-500">
+        <p className="mt-10 text-center text-sm text-slate-400">
           Already have an account?
           <Link
             to="/login"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            className="font-semibold leading-6 text-indigo-300 hover:text-indigo-500"
           >
             {" "}
             Sign in here
           </Link>
         </p>
       </div>
+    </div>
     </div>
     );
 };

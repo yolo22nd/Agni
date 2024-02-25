@@ -29,7 +29,17 @@ const Student = () => {
   const handlePopupClose = () => {
     setIsPopupOpen(false);
   };
-
+  async function fetchData() {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/register/');
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+  
+  fetchData();
 
   return (
     <>

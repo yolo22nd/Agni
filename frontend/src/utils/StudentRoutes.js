@@ -7,8 +7,8 @@ const StudentRoutes = (children, ...rest) => {
     let {user} = useContext(AuthContext)
     console.log("student route works")
     return(
-        user.is_student ? <Outlet/> : <Navigate to="/login" />
-        // user ? <Outlet/> : <Outlet/>
+        // user.is_student ? <Outlet/> : <Navigate to="/login" />
+        user ? <Outlet/> : <Outlet/>
     )
 }
 
