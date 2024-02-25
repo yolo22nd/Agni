@@ -1,5 +1,5 @@
 import {React,useState} from 'react'
-
+import './Venue.css'
 const Venue = () => {
     const [selectedValue, setSelectedValue] = useState('1');
 
@@ -8,14 +8,26 @@ const Venue = () => {
       setSelectedValue(event.target.value);
     };
     
-    const occupiedStyle={
-        background:"rgb(229 231 235 )"
+    // const occupiedStyle={
+    //     background:"rgb(229 231 235 )"
+    // }
+    // const vacantStyle={
+    //     background:"white",
+    //     border:'2px solid rgb(229 231 235 )',
+    //     cursor:'pointer',
+    // }
+    const handleClick = (event) => {
+      const roomId = event.target.id;
+      console.log("Clicked room id:", roomId);
+      const roomElement = document.getElementById(roomId);
+  // Check if the roomElement exists before adding the class
+  if(roomElement.classList.contains('vacant')){
+    if (roomElement.classList.contains('selected')) {
+      roomElement.classList.remove('selected');
     }
-    const vacantStyle={
-        background:"white",
-        border:'2px solid rgb(229 231 235 )',
-        cursor:'pointer',
-    }
+    else roomElement.classList.add('selected');
+  }
+    };
     return (
         <div className='w-full h-16 bg-slate-900'>
         <style></style>
@@ -27,48 +39,48 @@ const Venue = () => {
       {selectedValue==='1' && 
         <div className='mt-8 mx-4 mb-2 p-2'>
             <div class="grid grid-cols-12 grid-rows-12 gap-4">
-            <div class="p-16 col-span-2 row-span-3" style={{ ...occupiedStyle, ":hover": { background: "green" } }} id='1'>Room 1</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='2'>Room 2</div>
-            <div style={{...occupiedStyle}} class=" p-16 row-span-3" id=''>Room 1</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='3'>Room 3</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-3 row-span-5" id='4'>Room 4</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-2 row-span-6" id='5'>Room 5</div>
+            <div class="vacant p-16 col-span-2 row-span-3" id='1' onClick={handleClick}>Room 1</div>
+            <div  class=" occupied p-16 col-span-3 row-span-3" id='2' onClick={handleClick}>Room 2</div>
+            <div  class=" occupied p-16 row-span-3" id='0' onClick={handleClick}>Room 1</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='3' onClick={handleClick}>Room 3</div>
+            <div  class=" occupied p-16 col-span-3 row-span-5" id='4' onClick={handleClick}>Room 4</div>
+            <div  class=" occupied p-16 col-span-2 row-span-6" id='5' onClick={handleClick}>Room 5</div>
 
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
 
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-6" id='6'>Room 6</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-4" id='7'>Room 7</div>
+            <div  class="occupied p-16 col-span-3 row-span-6" id='6' onClick={handleClick}>Room 6</div>
+            <div class="occupied p-16 col-span-3 row-span-4" id='7' onClick={handleClick}>Room 7</div>
 
-            <div class="bg-white p-16 col-span-2 row-span-3">Entrance</div>
+            <div class=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
             <div class="bg-white p-16 row-span-3"></div>
 
-            <div style={{...occupiedStyle}} class=" p-16 col-span-2 row-span-3" id='8'>Room 8</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-2 row-span-3" id='9'>Room 9</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-2 row-span-3" id='10'>Room 10</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='11'>Room 11</div>
+            <div  class="occupied p-16 col-span-2 row-span-3" id='8' onClick={handleClick}>Room 8</div>
+            <div  class="occupied p-16 col-span-2 row-span-3" id='9' onClick={handleClick}>Room 9</div>
+            <div  class="occupied p-16 col-span-2 row-span-3" id='10' onClick={handleClick}>Room 10</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='11' onClick={handleClick}>Room 11</div>
         </div>
         </div>
       }
       {selectedValue==='2' && 
         <div className='mt-8 mx-4 mb-2 p-2'>
             <div class="grid grid-cols-12 grid-rows-12 gap-4">
-            <div class="p-16 col-span-2 row-span-3" style={{...occupiedStyle}} id='a'>Room A</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='b'>Room B</div>
-            <div style={{...occupiedStyle}} class=" p-16 row-span-3" id='c'>Room C</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='d'>Room D</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-3 row-span-5" id='e'>Room E</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-2 row-span-6" id='f'>Room F</div>
+            <div class="occupied p-16 col-span-2 row-span-3" id='a' onClick={handleClick}>Room A</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='b' onClick={handleClick}>Room B</div>
+            <div  class="occupied p-16 row-span-3" id='c' onClick={handleClick}>Room C</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='d' onClick={handleClick}>Room D</div>
+            <div  class="occupied p-16 col-span-3 row-span-5" id='e' onClick={handleClick}>Room E</div>
+            <div  class="occupied p-16 col-span-2 row-span-6" id='f' onClick={handleClick}>Room F</div>
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-6" id='g'>Room G</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-4" id='h'>Room H</div>
+            <div  class="occupied p-16 col-span-3 row-span-6" id='g' onClick={handleClick}>Room G</div>
+            <div  class="occupied p-16 col-span-3 row-span-4" id='h' onClick={handleClick}>Room H</div>
             <div class="bg-white p-16 col-span-2 row-span-3">Entrance</div>
             <div class="bg-white p-16 row-span-3"></div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-2 row-span-3"  id='i'>Room I</div>
-            <div style={{...vacantStyle}} class=" p-16 col-span-2 row-span-3" id='j'>Room J</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-2 row-span-3" id='k'>Room K</div>
-            <div style={{...occupiedStyle}} class=" p-16 col-span-3 row-span-3" id='l'>Room L</div>
+            <div  class="occupied p-16 col-span-2 row-span-3"  id='i' onClick={handleClick}>Room I</div>
+            <div  class="occupied p-16 col-span-2 row-span-3" id='j' onClick={handleClick}>Room J</div>
+            <div class="occupied p-16 col-span-2 row-span-3" id='k' onClick={handleClick}>Room K</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='l' onClick={handleClick}>Room L</div>
         </div>
         </div>
       }

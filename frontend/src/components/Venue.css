@@ -1,0 +1,13 @@
+.occupied{
+    background-color: rgb(229 231 235);
+}
+.vacant{
+    border:2px solid rgb(229 231 235) ;
+}
+.vacant:hover{
+    background: aliceblue;
+    cursor: pointer;
+}
+.selected{
+    background: #c7ffc9ba;
+}
