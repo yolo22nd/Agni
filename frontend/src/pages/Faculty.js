@@ -273,11 +273,11 @@ function Faculty() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-around h-full mr-5">
-                  {!e.is_rejected &&    <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
+                  {!e.is_approved &&    <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
                         Accepted <DoneIcon />
                       </div>
           }
-          {e.is_rejected &&
+          {!e.is_approved &&
                       <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-red-600">
                         Rejected <CloseIcon />
                       </div>
