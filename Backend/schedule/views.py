@@ -118,9 +118,32 @@ def email_approval(request, event, fac_id):
 
 
 
-class DisplayEventStudent(viewsets.ModelViewSet):
+class DisplayEventStudentApproved(viewsets.ModelViewSet):
     queryset = Event.objects.filter(is_approved=True)
     serializer_class = EventSerializerAll
+
+class DisplayEventStudentRejected(viewsets.ModelViewSet):
+    queryset = Event.objects.filter(is_rejected=True)
+    serializer_class = EventSerializerAll
+
+class DisplayEventStudentPrevious(viewsets.ModelViewSet):
+    queryset = Event.objects.filter(is_approved=False)
+    serializer_class = EventSerializerAll
+
+
+class DisplayEventStudentPending(viewsets.ModelViewSet):
+    #get facid, event_name
+    #get is_principle/whatever from facid
+
+    #event name se get booking
+    #new booking list by booking mei run filter for is_approved by whatever false
+    #create new event list for every booking ka event 
+
+    #return event list
+
+    queryset = Event.objects.filter(is_rejected=False , is_approved=False)
+    serializer_class = EventSerializerAll
+
 
 class DisplayEvent(viewsets.ModelViewSet):
     queryset = Event.objects.all()

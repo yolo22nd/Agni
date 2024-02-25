@@ -3,14 +3,67 @@ import Header from "../components/Header";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 function Faculty() {
   const [render, setRender] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
+  const [pendingevents,setPendingEvents] = useState([]);
+  const [events,setEvents] = useState([]);
+  const {user} = useContext(AuthContext)
 
   useEffect(() => {
     setRender(true);
+    getPendingEvents()
+    getEvents()
   }, []);
+
+
+  let getPendingEvents = async()=>{
+    console.log("fetching response")
+    let response = await fetch('http://127.0.0.1:8000/events/display/student/pending/', {
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
+            // 'Authorization':'Bearer '+String(authTokens.access),
+          }
+    })
+        console.log("response fetched")
+    let data = await response.json()
+    console.log("data set")
+    console.log(data)
+    if (response.status === 200) {
+      setPendingEvents(data);
+      console.log('events set')
+  } 
+  // else if (response.statusText === 'Unauthorized'){
+  //   logOutUser()
+  // }  
+}
+
+  let getEvents = async()=>{
+    console.log("fetching response")
+    let response = await fetch('http://127.0.0.1:8000/events/display/student/previous/', {
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
+            // 'Authorization':'Bearer '+String(authTokens.access),
+          }
+    })
+        console.log("response fetched")
+    let data = await response.json()
+    console.log("data set")
+    console.log(data)
+    if (response.status === 200) {
+      setEvents(data);
+      console.log('events set')
+  } 
+  // else if (response.statusText === 'Unauthorized'){
+  //   logOutUser()
+  // }  
+}
+
 
   function approveAll() {
     let a = document.getElementById("approveAll").checked;
@@ -22,7 +75,7 @@ function Faculty() {
         let pass = prompt("Enter password to proceed");
         if (pass === "Hello") {
           try {
-            events.map((ev) => {
+            pendingevents.map((ev) => {
                 alert("All requests accepted")
             });
           } catch (e) {
@@ -38,17 +91,35 @@ function Faculty() {
       }
     }
   }
+  let approve = async(e)=>{
+    console.log("fetching response")
+    let response = await fetch('http://127.0.0.1:8000/events/approval/'+e.name+'/'+user.fac_id+'/', {
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
+            // 'Authorization':'Bearer '+String(authTokens.access),
+          }
+    })
+        console.log("response fetched")
+    let data = await response.json()
+    console.log(response)
+    console.log(data)
+    
+}
   function handleAccept(e) {
-    try {
-      let pass = prompt("Enter password to proceed");
-      if (pass === "Hello") {
-        alert("Request Accepted");
-      } else {
-        alert("Wrong password. Request still pending");
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   let pass = prompt("Enter password to proceed");
+    //   if (pass === "Hello") {
+    //     alert("Request Accepted");
+    //   } else {
+    //     alert("Wrong password. Request still pending");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    approve(e)
+
+  
   }
   function handleReject(e) {
     try {
@@ -63,50 +134,22 @@ function Faculty() {
     }
   }
 
-  let events = [
-    {
-      _id: 123456,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-    },
-    {
-      _id: 123456,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-    },
-  ];
+  // let events = [
+  //   {
+  //     _id: 123456,
+  //     name: "DJS Trinity",
+  //     committee: "unicode",
+  //     booking: {},
+  //     venue: "djs",
+  //     regi_members: [],
+  //     type: "",
+  //     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
+  //     date: "25-02-2024",
+  //     time: "19:20",
+  //     image:
+  //       "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+  //   },
+  // ];
   return (
     <div className="h-max">
       <Header />
@@ -131,7 +174,7 @@ function Faculty() {
             </label>
           </div>
           {render &&
-            events.map((e) => {
+            pendingevents.map((e) => {
               return (
                 <div
                   key={e.name}
@@ -150,7 +193,7 @@ function Faculty() {
                           <div className="text-slate-100 text-left font-medium">
                             Venue:{" "}
                             <span className="font-normal text-md">
-                              {e.venue.place}
+                              {e.venue}
                             </span>
                           </div>
                           <div className="text-slate-100 text-left font-medium ml-5">
@@ -228,12 +271,15 @@ function Faculty() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-around h-full mr-5">
-                      <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
+                  {!e.is_rejected &&    <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
                         Accepted <DoneIcon />
                       </div>
+          }
+          {e.is_rejected &&
                       <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-red-600">
                         Rejected <CloseIcon />
                       </div>
+            }
                     </div>
                   </div>
                 </div>
