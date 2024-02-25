@@ -168,3 +168,4 @@ def registerFaculty(request):
         faculty.save()
 
         return Response({'message': 'Faculty created successfully'}, status=status.HTTP_201_CREATED)
+
