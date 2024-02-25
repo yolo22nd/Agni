@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Alert from '@mui/joy/Alert';
-import Box from '@mui/joy/Box';
+// import Box from '@mui/joy/Box';
 import IconButton from '@mui/joy/IconButton';
 import PlaylistAddCheckCircleRoundedIcon from '@mui/icons-material/PlaylistAddCheckCircleRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -15,7 +15,7 @@ const SaveBanner = () => {
   return (
     <>
       {open && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+        // <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
           <Alert
             variant="soft"
             color="success"
@@ -28,7 +28,7 @@ const SaveBanner = () => {
           >
             Meme saved!
           </Alert>
-        </Box>
+        // </Box>
       )}
     </>
   );

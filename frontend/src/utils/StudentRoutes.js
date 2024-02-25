@@ -5,10 +5,10 @@ import AuthContext from "../context/AuthContext";
 
 const StudentRoutes = (children, ...rest) => {
     let {user} = useContext(AuthContext)
-    console.log("student route works")
+    console.log("user.is_student: "+user.is_student)
     return(
-        // user.is_student ? <Outlet/> : <Navigate to="/login" />
-        user ? <Outlet/> : <Outlet/>
+        user.is_student ? <Outlet/> : <Navigate to="/login" />
+        // user ? <Outlet/> : <Outlet/>
     )
 }
 
