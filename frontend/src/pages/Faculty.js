@@ -273,11 +273,7 @@ function Faculty() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-around h-full mr-5">
-<<<<<<< Updated upstream
                   {!e.is_approved &&    <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
-=======
-                  {e.is_approved &&    <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-green-500">
->>>>>>> Stashed changes
                         Accepted <DoneIcon />
                       </div>
           }
