@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from './Header';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
@@ -29,17 +29,23 @@ const Student = () => {
   const handlePopupClose = () => {
     setIsPopupOpen(false);
   };
-  async function fetchData() {
+  const [events, setEvents] = useState([]); 
+  
+  const fetchData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/register/');
+      const response = await fetch('http://127.0.0.1:8000/events/display/student/');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       const data = await response.json();
-      console.log(data);
+      setEvents(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }
-  
-  fetchData();
+  };
+  useEffect(() => {
+    fetchData(); 
+  }, []);
 
   return (
     <>
@@ -58,15 +64,6 @@ const Student = () => {
       <div>
         <img src={slide1} alt="" className='w-full'></img>
       </div>
-      <div>
-        <img src={slide1} alt="" className='w-full'></img>
-      </div>
-      <div>
-        <img src={slide1} alt="" className='w-full'></img>
-      </div>
-      <div>
-        <img src={slide1} alt="" className=' w-full'></img>
-      </div>
     </Slider>
       </div>
       </div>
@@ -77,7 +74,7 @@ const Student = () => {
         </div>
         <div className='flex flex-row flex-wrap gap-16 md:gap-x-48 gap-y-16 justify-center items-center '>
       
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
+        {/* <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
             <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
             <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
             <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'  onClick={handlePopupOpen}>View Details</button>
@@ -95,34 +92,31 @@ const Student = () => {
           </div>
         </div>
       )}
+        </div> */}
+        {events.map((event, index) => (
+        <div key={index} className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
+          <img src={event.image} className='h-64 w-80 rounded-tr-3xl'></img>    
+          <p className='text-slate-900 text-3xl mt-2 font-bold'>{event.name}</p>
+          <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'onClick={handlePopupOpen}>View Details</button>
+          {isPopupOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg h-auto w-96 relative">
+            <h2 className='font-bold text-blue-900 text-2xl mb-2'>{event.name}</h2>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Description: <span className='text-black font-medium text-sm'>{event.desc}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Date: <span className='text-black font-medium text-sm'>{event.date}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Time: <span className='text-black font-medium text-sm'>{event.time}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Location: <span className='text-black font-medium text-sm'>{event.venue}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Committee: <span className='text-black font-medium text-sm'>{event.committee}</span></h3>
+            <button onClick={handlePopupClose} className='absolute top-0 right-0 p-2'><CloseOutlinedIcon/></button>
+            <button className='px-4 py-2 text-white bg-slate-900 rounded-full mt-2'>Register</button>
+          </div>
         </div>
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
-            <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
-            <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
-            <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'>View Details</button>
+      )}
         </div>
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
-            <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
-            <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
-            <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'>View Details</button>
-        </div>
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
-            <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
-            <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
-            <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'>View Details</button>
-        </div>
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
-            <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
-            <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
-            <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'>View Details</button>
-        </div>
-        <div className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
-            <img src={slide1} className='h-64 w-80 rounded-tr-3xl'></img>    
-            <p className='text-slate-900 text-3xl mt-2 font-bold'>Hackniche 2.0</p>
-            <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'>View Details</button>
+      ))}
         </div>
         </div>
-        </div>
+
         <div className=' m-32 h-96 bg-white rounded-2xl mx-4' style={{width:'30%'}}>
           <div className='h-16 bg-red-500 rounded-tl-2xl rounded-tr-2xl flex justify-center items-center text-white font-bold text-2xl'>
           <NotificationsIcon/>&nbsp;Notifications
