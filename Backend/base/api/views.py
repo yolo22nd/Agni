@@ -23,16 +23,34 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         if hasattr(user, 'student'):
+            student = Student.objects.get(user=user)
             token['is_student'] = True
-            token['student']= Student.objects.get(name=user.username)
+            token['name'] = student.name
+            token['email'] = student.email
+            token['department'] = student.department
+            token['ac_year'] = student.ac_year
+            token['rollno'] = student.rollno
         if hasattr(user, 'faculty'):
+            faculty = Faculty.objects.get(user=user)
             token['is_faculty'] = True
-            token['faculty']= Faculty.objects.get(name=user.username)
+            token['name'] = faculty.name
+            token['email'] = faculty.email
+            token['department'] = faculty.department
+            token['fac_id'] = faculty.fac_id
+            token['is_principle'] = faculty.is_principle
+            token['is_hod'] = faculty.is_hod
+            token['is_mentor'] = faculty.is_mentor
+            token['is_dean'] = faculty.is_dean
         if hasattr(user, 'committee'):
+            committee = Committee.objects.get(user=user)
             token['is_committee'] = True
-            token['committee']= Committee.objects.get(name=user.username)
+            token['name'] = committee.name
+            token['email'] = committee.email
+            token['department'] = committee.department
+            token['desc'] = committee.desc
 
         return token
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
