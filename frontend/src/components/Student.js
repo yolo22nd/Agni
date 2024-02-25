@@ -5,9 +5,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from './Header';
-import { useState,useEffect } from "react";
+import { useState,useEffect,Link } from "react";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useNavigate } from 'react-router-dom';
 
 const Student = () => {
     var settings = {
@@ -19,7 +20,7 @@ const Student = () => {
         autoplay: true, // Enable automatic sliding
         autoplaySpeed: 3000,
       };
-
+      var eventId=1;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handlePopupOpen = () => {
@@ -28,6 +29,13 @@ const Student = () => {
 
   const handlePopupClose = () => {
     setIsPopupOpen(false);
+  };
+  const navigate = useNavigate();
+  const openbuy = (eventId) => {
+    // window.location.href = '/buy';
+    console.log(eventId)
+    // return <Link to={{ pathname: "/buy", state: { eventId: eventId } }} />;
+    return navigate('/buy/'+eventId, { state:{ eventId: eventId }});
   };
   const [events, setEvents] = useState([]); 
   
@@ -108,7 +116,7 @@ const Student = () => {
             <h3 className='font-bold text-blue-700 text-xl text-left'>Location: <span className='text-black font-medium text-sm'>{event.venue}</span></h3>
             <h3 className='font-bold text-blue-700 text-xl text-left'>Committee: <span className='text-black font-medium text-sm'>{event.committee}</span></h3>
             <button onClick={handlePopupClose} className='absolute top-0 right-0 p-2'><CloseOutlinedIcon/></button>
-            <button className='px-4 py-2 text-white bg-slate-900 rounded-full mt-2'>Register</button>
+            <button onClick={() => openbuy(event.id)} className='px-4 py-2 text-white bg-slate-900 rounded-full mt-2'>Register</button>
           </div>
         </div>
       )}
