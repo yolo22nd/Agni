@@ -1,24 +1,20 @@
-import {React,useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import {React,useState} from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import './Venue.css'
 const Venue = () => {
     const [selectedValue, setSelectedValue] = useState('1');
-    const { state } = useLocation();
-    console.log(state.name);
 
     // Function to handle change in selected value
     const handleChange = (event) => {
       setSelectedValue(event.target.value);
     };
-    
-    // const occupiedStyle={
-    //     background:"rgb(229 231 235 )"
-    // }
-    // const vacantStyle={
-    //     background:"white",
-    //     border:'2px solid rgb(229 231 235 )',
-    //     cursor:'pointer',
-    // }
+
+    const navigate = useNavigate();
+    const handleGoBack = () => {
+      navigate('/committee');
+    };
+
     const handleClick = (event) => {
       const roomId = event.target.id;
       console.log("Clicked room id:", roomId);
@@ -44,24 +40,24 @@ const Venue = () => {
             <div class="grid grid-cols-12 grid-rows-12 gap-4">
             <div class="vacant p-16 col-span-2 row-span-3" id='1' onClick={handleClick}>Room 1</div>
             <div  class=" occupied p-16 col-span-3 row-span-3" id='2' onClick={handleClick}>Room 2</div>
-            <div  class=" occupied p-16 row-span-3" id='3' onClick={handleClick}>Room 3</div>
-            <div  class="occupied p-16 col-span-3 row-span-3" id='4' onClick={handleClick}>Room 4</div>
-            <div  class=" occupied p-16 col-span-3 row-span-5" id='5' onClick={handleClick}>Room 5</div>
-            <div  class=" occupied p-16 col-span-2 row-span-6" id='6' onClick={handleClick}>Room 6</div>
+            <div  class=" occupied p-16 row-span-3" id='0' onClick={handleClick}>Room 1</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='3' onClick={handleClick}>Room 3</div>
+            <div  class=" occupied p-16 col-span-3 row-span-5" id='4' onClick={handleClick}>Room 4</div>
+            <div  class=" occupied p-16 col-span-2 row-span-6" id='5' onClick={handleClick}>Room 5</div>
 
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
             <div class="bg-white p-16 col-span-2 row-span-6"></div>
 
-            <div  class="occupied p-16 col-span-3 row-span-6" id='7' onClick={handleClick}>Room 7</div>
-            <div class="occupied p-16 col-span-3 row-span-4" id='8' onClick={handleClick}>Room 8</div>
+            <div  class="occupied p-16 col-span-3 row-span-6" id='6' onClick={handleClick}>Room 6</div>
+            <div class="occupied p-16 col-span-3 row-span-4" id='7' onClick={handleClick}>Room 7</div>
 
             <div class=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
             <div class="bg-white p-16 row-span-3"></div>
 
+            <div  class="occupied p-16 col-span-2 row-span-3" id='8' onClick={handleClick}>Room 8</div>
             <div  class="occupied p-16 col-span-2 row-span-3" id='9' onClick={handleClick}>Room 9</div>
             <div  class="occupied p-16 col-span-2 row-span-3" id='10' onClick={handleClick}>Room 10</div>
-            <div  class="occupied p-16 col-span-2 row-span-3" id='11' onClick={handleClick}>Room 11</div>
-            <div  class="occupied p-16 col-span-3 row-span-3" id='12' onClick={handleClick}>Room 12</div>
+            <div  class="occupied p-16 col-span-3 row-span-3" id='11' onClick={handleClick}>Room 11</div>
         </div>
         </div>
       }
@@ -87,12 +83,17 @@ const Venue = () => {
         </div>
         </div>
       }
+      <div className='flex ml-8'>
       <div className='mt-4'>
         <span className='mr-4 font-bold text-xl'>Rooms:</span>
         <span className='h-8 w-8 bg-gray-200 px-4 py-2 rounded-xl mr-2'></span>
       <span className='mr-8'>Occupied</span>
       <span className='h-8 w-8 border-2 border-gray-200 px-4 py-2 rounded-xl mr-2'></span>
       <span>Vacant</span>
+      </div>
+      <div>
+        <button className='px-4 py-2 bg-slate-900 text-white rounded-full cursor-pointer ml-32 mt-2' onClick={handleGoBack}>Confirm selection</button>
+      </div>
       </div>
     </div>
   )
