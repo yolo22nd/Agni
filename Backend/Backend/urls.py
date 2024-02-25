@@ -35,5 +35,8 @@ urlpatterns = [
     #view venue
     path('venue/display/', DisplayVenue.as_view({'get': 'list'}), name='view_venues'),
     path('venue/display/<str:pk>/', DisplayVenue.as_view({'get': 'retrieve'}), name='view_venuedeets'),
+
+    #register for event
+    path('student/register/', Registration.as_view(), name='event_registration'),
 ]
 
