@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from base.models import Student,Faculty, Committee
 from base.models import Student, Faculty, Committee
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -23,10 +24,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         if hasattr(user, 'student'):
             token['is_student'] = True
+            token['student']= Student.objects.get(name=user.username)
         if hasattr(user, 'faculty'):
             token['is_faculty'] = True
+            token['faculty']= Faculty.objects.get(name=user.username)
         if hasattr(user, 'committee'):
             token['is_committee'] = True
+            token['committee']= Committee.objects.get(name=user.username)
 
         return token
 
