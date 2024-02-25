@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Modal} from "flowbite-react";
+import { Modal } from "flowbite-react";
 import Header from "../components/Header";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -23,6 +23,15 @@ function Committee() {
   const [desc, setDesc] = useState("");
   const [img, setImg] = useState("");
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const handlePopupOpen = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setIsPopupOpen(false);
+  };
+
   function onCloseModal() {
     setOpenModal(false);
   }
@@ -30,13 +39,13 @@ function Committee() {
     setOpenModal2(false);
   }
   function handleFile(e) {
-    setName(e.target.files[0])
+    setName(e.target.files[0]);
   }
-  function handleProgress(e){
+  function handleProgress(e) {
     setCurrentEvent(e);
     setOpenModal2(true);
   }
-  function handleSubmit (e) {
+  function handleSubmit(e) {
     // e.preventDefault();
     // try {
     //   let res = axios.post('//',
@@ -45,7 +54,7 @@ function Committee() {
     // } catch (e) {
     //   console.error(e)
     // }
-    console.log("form submitted")
+    console.log("form submitted");
   }
 
   let events = [
@@ -181,12 +190,12 @@ function Committee() {
   }, []);
   return (
     <div className="h-max">
-        <Header />
-        <div className="relative top-12 bg-gradient-to-br from-cyan-800 to-indigo-950 h-max pt-4">
+      <Header />
+      <div className="relative top-12 bg-gradient-to-br from-cyan-800 to-indigo-950 h-max pt-4">
         <div className="max-w-[1300px] mx-auto flex justify-end text-white mt-8 relative">
           <div
             className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 hover:cursor-pointer bg-green-700 hover:bg-green-800"
-            onClick={() => setOpenModal(true)}
+            onClick={() => handlePopupOpen()}
           >
             Create New Event <AddIcon />
           </div>
@@ -194,6 +203,92 @@ function Committee() {
             View All Events <RemoveRedEyeIcon className="pl-1" />
           </div>
         </div>
+        {isPopupOpen && (
+          <div className="space-y-6 w-2/6 mx-auto bg-slate-600 p-8 rounded-3xl fixed top-[10rem] left-1/3 shadow-2xl">
+            <div className="text-red-400 font-bold text-right" onClick={handlePopupClose}>
+              <button>X</button>
+            </div>
+            <h3 className="text-xl font-medium text-white text-center">
+              Fill up the Event Details
+            </h3>
+            <div>
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <div className="flex justify-between mb-4">
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="eventName"
+                      className="block font-normal text-slate-200 mb-0.5 pl-1"
+                    >
+                      Event Name
+                    </label>
+                    <input
+                      type="text"
+                      id="eventName"
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="p-1 pl-2 pr-2 rounded-lg w-11/12 focus:outline-none"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="eventDate"
+                      className="block font-normal text-slate-200 mb-0.5 pl-1"
+                    >
+                      Event Date
+                    </label>
+                    <input
+                      type="date"
+                      id="eventDate"
+                      onChange={(e) => setDate(e.target.value)}
+                      required
+                      className="p-1 text-md pb-0.5 pl-2 pr-2 rounded-lg w-full focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div className="w-full mb-4">
+                  <label
+                    htmlFor="eventDesc"
+                    className="block font-normal text-slate-200 mb-0.5 pl-1"
+                  >
+                    Event Description
+                  </label>
+                  <input
+                    type="text"
+                    id="eventDesc"
+                    onChange={(e) => setDesc(e.target.value)}
+                    required
+                    className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
+                  />
+                </div>
+                <div className="flex justify-between mb-8">
+                  <div className="w-full">
+                    <label
+                      htmlFor="eventImg"
+                      className="block font-normal text-slate-200 mb-0.5 pl-1"
+                    >
+                      Image
+                    </label>
+                    <input
+                      type="file"
+                      id="eventImg"
+                      onChange={(e) => handleFile(e)}
+                      accept="image/*"
+                      required
+                      className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <input
+                    type="submit"
+                    value="Check available Venue"
+                    className="bg-green-600 text-white hover:bg-green-700 hover:cursor-pointer p-1 w-full rounded-2xl"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         <Modal
           className="bg-opacity-70"
           show={openModal}
@@ -257,7 +352,7 @@ function Committee() {
                     />
                   </div>
                   <div className="flex justify-between mb-8">
-                  <div className="w-full">
+                    <div className="w-full">
                       <label
                         htmlFor="eventImg"
                         className="block font-normal text-slate-200 mb-0.5 pl-1"
@@ -273,7 +368,6 @@ function Committee() {
                         className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
                       />
                     </div>
-                    
                   </div>
                   <div>
                     <input
@@ -287,34 +381,45 @@ function Committee() {
             </div>
           </Modal.Body>
         </Modal>
-        
-        <Modal 
+
+        <Modal
           className="bg-opacity-70"
           show={openModal2}
           size="md"
           onClose={onCloseModal2}
-          popup>
+          popup
+        >
           <Modal.Header className="text-red-400 w-2/6 mx-auto bg-slate-600 font-bold rounded-tl-2xl rounded-tr-2xl" />
           <Modal.Body className="w-2/6 m-auto bg-slate-600 p-10 rounded-br-2xl rounded-bl-2xl">
             <ol class="flex items-center w-full text-sm font-medium text-center text-gray-100 sm:text-base">
               <li class="flex md:w-full items-center text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                  </svg> Personal <span class="hidden sm:inline-flex sm:ms-2">Info</span>
+                  <svg
+                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                  </svg>{" "}
+                  Personal{" "}
+                  <span class="hidden sm:inline-flex sm:ms-2">Info</span>
                 </span>
               </li>
               <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                  <span class="me-2">2</span> {currentEvent.name} <span class="hidden sm:inline-flex sm:ms-2">{currentEvent.date}</span>
+                  <span class="me-2">2</span> {currentEvent.name}{" "}
+                  <span class="hidden sm:inline-flex sm:ms-2">
+                    {currentEvent.date}
+                  </span>
                 </span>
               </li>
               <li class="flex items-center">
                 <span class="me-2">3</span> Confirmation
-              </li> 
+              </li>
             </ol>
           </Modal.Body>
-
         </Modal>
         <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
           <h1>Your Events</h1>
@@ -367,7 +472,7 @@ function Committee() {
               );
             })}
         </div>
-        </div>
+      </div>
     </div>
   );
 }
