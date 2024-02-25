@@ -21,20 +21,22 @@ function Faculty() {
 
 
   let getPendingEvents = async()=>{
+    let fac_id=user.fac_id
     console.log("fetching response")
     let response = await fetch('http://127.0.0.1:8000/events/display/student/pending/', {
-          method:'GET',
+          method:'POST',
           headers:{
             'Content-Type':'application/json',
             // 'Authorization':'Bearer '+String(authTokens.access),
-          }
-    })
+          },
+          body:JSON.stringify({fac_id})     
+    })  
         console.log("response fetched")
     let data = await response.json()
     console.log("data set")
     console.log(data)
     if (response.status === 200) {
-      setPendingEvents(data);
+      setPendingEvents(data.event_list);
       console.log('events set')
   } 
   // else if (response.statusText === 'Unauthorized'){

@@ -131,6 +131,12 @@ class DisplayEventStudentPrevious(viewsets.ModelViewSet):
     serializer_class = EventSerializerAll
 
 
+from rest_framework.response import Response
+from rest_framework import status
+
+from rest_framework.response import Response
+from rest_framework import status
+
 class DisplayEventStudentPending(viewsets.ViewSet):
     serializer_class = EventSerializerAll
 
@@ -141,24 +147,29 @@ class DisplayEventStudentPending(viewsets.ViewSet):
         try:
             faculty_obj = Faculty.objects.get(fac_id=fac_id)
             event_obj = Event.objects.get(id=event_id)
-            booking_obj = Booking.objects.get(event=event_obj)
+            venue_obj = event_obj.venue
+            booking_obj, created = Booking.objects.get_or_create(event=event_obj,venue= venue_obj, date=event_obj.date, time=event_obj.time,committee=event_obj.committee)
+            if created:
+                booking_obj.save()
 
-            event_list = []
+            event_set = set()
 
             if faculty_obj.is_principle:
                 booking_queryset = Booking.objects.filter(is_approved_pri=False)
-                event_list = [booking.event for booking in booking_queryset]
+                event_set.update([booking.event for booking in booking_queryset])
             elif faculty_obj.is_hod:
                 booking_queryset = Booking.objects.filter(is_approved_hod=False)
-                event_list = [booking.event for booking in booking_queryset]
+                event_set.update([booking.event for booking in booking_queryset])
             elif faculty_obj.is_mentor:
                 booking_queryset = Booking.objects.filter(is_approved_mentor=False)
-                event_list = [booking.event for booking in booking_queryset]
+                event_set.update([booking.event for booking in booking_queryset])
             elif faculty_obj.is_dean:
                 booking_queryset = Booking.objects.filter(is_approved_dean=False)
-                event_list = [booking.event for booking in booking_queryset]
+                event_set.update([booking.event for booking in booking_queryset])
 
-            return Response({'event_list': event_list})
+            # Serialize the events
+            serializer = self.serializer_class(list(event_set), many=True)
+            return Response({'event_list': serializer.data})
         except (Faculty.DoesNotExist, Event.DoesNotExist, Booking.DoesNotExist) as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
