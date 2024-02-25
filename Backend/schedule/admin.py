@@ -13,7 +13,7 @@ class BookingAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'committee', 'booking', 'venue', 'date', 'time', 'image'] 
+    list_display = ['name', 'committee', 'venue', 'date', 'time', 'image'] 
 
 
 admin.site.register(Venue)

@@ -6,13 +6,14 @@ from django.shortcuts import render
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets, mixins
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from schedule.serializers import *
 from base.models import *
+from base.serializers import *
 
 # Create your views here.
 
@@ -36,11 +37,14 @@ class createEvent(APIView):
                 hod = Faculty.objects.get(is_hod=True)
                 mentor = Faculty.objects.get(is_mentor=True)
                 dean = Faculty.objects.get(is_dean=True)
-                return Response({'message' : "Event booked successfully"})
+                print(principle, hod, mentor, dean)
+                
                 email_send(principle.email, principle.fac_id, event_name, request.data)
                 email_send(hod.email, hod.fac_id, event_name, request.data)
                 email_send(mentor.email, mentor.fac_id, event_name, request.data)
                 email_send(dean.email, dean.fac_id, event_name, request.data)
+
+                return Response({'message' : "Event booked successfully"})
             except Exception as e:
                 print(f'errors : {e}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -58,35 +62,33 @@ def email_send(email, fac_id, event_name, event_data):
 
 # Verifying the email
 def email_approval(request, event, fac_id):
-    fac = get_object_or_404(Faculty, key=fac_id)
-    faculty = fac.email
-    
-    faculty_obj = Faculty.objects.get(email=faculty)
+    faculty_obj = get_object_or_404(Faculty, key=fac_id)
+       
     event_obj = Event.objects.get(name=event)
     booking = Booking.objects.get(event=event_obj)
 
     if faculty_obj.is_principle == True:
         if not booking.is_approved_pri:
-            event_obj.is_approved_pri = True
-            event_obj.save()
+            booking.is_approved_pri = True
+            booking.save()
             return JsonResponse({'message' : 'Approved by principle'})
     
     if faculty_obj.is_hod == True:
         if not booking.is_approved_hod:
-            event_obj.is_approved_hod = True
-            event_obj.save()
+            booking.is_approved_hod = True
+            booking.save()
             return JsonResponse({'message' : 'Approved by hod'})
 
     if faculty_obj.is_mentor == True:
         if not booking.is_approved_mentor:
-            event_obj.is_approved_mentor = True
-            event_obj.save()
+            booking.is_approved_mentor = True
+            booking.save()
             return JsonResponse({'message' : 'Approved by mentor'})
         
     if faculty_obj.is_dean == True:
         if not booking.is_approved_dean:
-            event_obj.is_approved_dean = True
-            event_obj.save()
+            booking.is_approved_dean = True
+            booking.save()
             return JsonResponse({'message' : 'Approved by dean'})
     
     # if not faculty_obj.is_verified:
@@ -98,4 +100,46 @@ def email_approval(request, event, fac_id):
 
         #add condition for all approve and set it true
     return JsonResponse({'message' : 'Event is already approved'})
+
+
+
+
+class DisplayEventStudent(viewsets.ModelViewSet):
+    queryset = Event.objects.filter(is_approved=True)
+    serializer_class = EventSerializerAll
+
+class DisplayEvent(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializerAll
+
+
+class DispDelEvent(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class DisplayCommittee(viewsets.ModelViewSet):
+    queryset = Committee.objects.all()
+    serializer_class = CommitteeSerializer
+
+   
+class DisplayStudent(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class DisplayFaculty(viewsets.ModelViewSet):
+    queryset = Faculty.objects.all()
+    serializer_class = FacultySerializer
+
+    
+class DisplayVenue(viewsets.ModelViewSet):
+    queryset = Venue.objects.all()
+    serializer_class = VenueSerializer
 

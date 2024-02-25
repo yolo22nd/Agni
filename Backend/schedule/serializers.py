@@ -15,3 +15,13 @@ class EventsSerializer(serializers.ModelSerializer):
         #     return Event.objects.create(committee=committee, **validated_data)
 
 
+class EventSerializerAll(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = '__all__'
+
+
+class VenueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Venue
+        fields = '__all__'
