@@ -56,8 +56,8 @@ function Committee() {
 
   let events = [
     {
-      _id: 123456,
-      name: "DJS Trinity",
+      _id: 1,
+      name: "Hackniche 2.0",
       committee: {
         name: "",
         department: {},
@@ -66,19 +66,21 @@ function Committee() {
       },
       booking: {},
       venue: {
-        place: "DJS HALL",
+        place: "Comps Dept",
       },
       regi_members: [],
       type: "",
       desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
+      date: "18-02-2024",
+      time: "09:00",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+      is_approved: true,
+      is_pending: false
     },
     {
-      _id: 123456,
-      name: "DJS Trinity",
+      _id: 2,
+      name: "SY3NGY",
       committee: {
         name: "",
         department: {},
@@ -87,18 +89,20 @@ function Committee() {
       },
       booking: {},
       venue: {
-        place: "DJS HALL",
+        place: "CS DS Dept",
       },
       regi_members: [],
       type: "",
       desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
+      date: "24-02-2024",
+      time: "10:00",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+        is_approved: true,
+        is_pending: false
     },
     {
-      _id: 123456,
+      _id: 3,
       name: "DJS Trinity",
       committee: {
         name: "",
@@ -117,9 +121,11 @@ function Committee() {
       time: "19:20",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+        is_approved: false,
+        is_pending: false
     },
     {
-      _id: 123456,
+      _id: 4,
       name: "DJS Trinity",
       committee: {
         name: "",
@@ -138,9 +144,11 @@ function Committee() {
       time: "19:20",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+        is_approved: false,
+        is_pending: true
     },
     {
-      _id: 123456,
+      _id: 5,
       name: "DJS Trinity",
       committee: {
         name: "",
@@ -159,9 +167,11 @@ function Committee() {
       time: "19:20",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+        is_approved: true,
+        is_pending: true
     },
     {
-      _id: 123456,
+      _id: 6,
       name: "DJS Trinity",
       committee: {
         name: "",
@@ -180,6 +190,9 @@ function Committee() {
       time: "19:20",
       image:
         "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
+        
+      is_approved: true,
+      is_pending: true
     },
   ];
   useEffect(() => {
@@ -300,39 +313,38 @@ function Committee() {
             <ol class="flex items-center w-full text-sm font-medium text-center text-gray-100 sm:text-base">
               <li class="flex md:w-full items-center text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                  <svg
-                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
+                  {currentEvent.is_pending? "" : <svg
+                    class="w-5 h-5 sm:w-8 sm:h-8 me-2.5"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
                     viewBox="0 0 20 20"
-                  >
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                  </svg>{" "}
-                  Personal{" "}
-                  <span class="hidden sm:inline-flex sm:ms-2">Info</span>
+                >
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                </svg>}
+                  <span class="hidden sm:inline-flex sm:ms-2">{currentEvent.is_pending? "Pending" : "Passed Forward"}</span>
                 </span>
               </li>
               <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                  <span class="me-2">2</span> {currentEvent.name}{" "}
                   <span class="hidden sm:inline-flex sm:ms-2">
-                    {currentEvent.date}
+                  {currentEvent.is_pending? "Approval Status" : (currentEvent.is_approved? "Approved" : "Rejected")}
                   </span>
                 </span>
               </li>
               <li class="flex items-center">
-                <span class="me-2">3</span> Confirmation
+                <span class="me-2">{currentEvent.is_pending? "Approval Status" : (currentEvent.is_approved? currentEvent.date : "-")}</span>
               </li>
             </ol>
           </div>
         )}
         <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
-          <h1>Your Events</h1>
+          <h1>Pending Events</h1>
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             events.map((e) => {
+              if(e.is_pending === true){
               return (
                 <div
                   key={e._id}
@@ -376,6 +388,113 @@ function Committee() {
                   </div>
                 </div>
               );
+              }
+            })}
+        </div>
+        <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
+          <h1>Approved Events</h1>
+        </div>
+        <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
+          {render &&
+            events.map((e) => {
+              if(e.is_pending === false && e.is_approved === true){
+              return (
+                <div
+                  key={e._id}
+                  class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
+                >
+                  <img class="w-full" src={e.image} alt="" />
+                  <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2 text-white">
+                      {e.name}
+                    </div>
+                    <p class="text-gray-300 text-base">{e.desc}</p>
+                  </div>
+                  <div class="px-6 pt-4 pb-2">
+                    <div className="flex">
+                      <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
+                        <LocationOnIcon /> {e.venue.place}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex items-center">
+                        <span class="rounded-full pl-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
+                          <AccessTimeIcon className="mr-0.5" />
+                          {e.date}
+                        </span>
+                        <span class="inline-block rounded-full  py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">
+                          <FiberManualRecordIcon sx={{ fontSize: 4 }} />{" "}
+                          {e.time}
+                        </span>
+                      </div>
+                      <div>
+                        <Link
+                          to=""
+                          className="text-sm  text-blue-400 underline"
+                          onClick={() => handleProgress(e)}
+                        >
+                          Approval Status{" "}
+                          <KeyboardArrowRightIcon sx={{ fontSize: 20 }} />{" "}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+              }
+            })}
+        </div>
+        <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
+          <h1>Rejected Events</h1>
+        </div>
+        <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
+          {render &&
+            events.map((e) => {
+              if(e.is_pending === false && e.is_approved === false){
+              return (
+                <div
+                  key={e._id}
+                  class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
+                >
+                  <img class="w-full" src={e.image} alt="" />
+                  <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2 text-white">
+                      {e.name}
+                    </div>
+                    <p class="text-gray-300 text-base">{e.desc}</p>
+                  </div>
+                  <div class="px-6 pt-4 pb-2">
+                    <div className="flex">
+                      <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
+                        <LocationOnIcon /> {e.venue.place}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex items-center">
+                        <span class="rounded-full pl-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
+                          <AccessTimeIcon className="mr-0.5" />
+                          {e.date}
+                        </span>
+                        <span class="inline-block rounded-full  py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">
+                          <FiberManualRecordIcon sx={{ fontSize: 4 }} />{" "}
+                          {e.time}
+                        </span>
+                      </div>
+                      <div>
+                        <Link
+                          to=""
+                          className="text-sm  text-blue-400 underline"
+                          onClick={() => handleProgress(e)}
+                        >
+                          Approval Status{" "}
+                          <KeyboardArrowRightIcon sx={{ fontSize: 20 }} />{" "}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+              }
             })}
         </div>
       </div>
