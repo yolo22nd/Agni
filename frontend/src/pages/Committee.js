@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
@@ -11,12 +12,17 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 function Committee() {
   const [render, setRender] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
   const [venue, setVenue] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [desc, setDesc] = useState("");
   const [img, setImg] = useState("");
+
+  const { user } = useContext(AuthContext);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpen2, setIsPopupOpen2] = useState(false);
@@ -34,172 +40,69 @@ function Committee() {
   const handlePopupClose2 = () => {
     setIsPopupOpen2(false);
   };
-  const handleClick = () => {
-    window.location.href = '/venue';
-  };
+
   function handleFile(e) {
     setName(e.target.files[0]);
   }
+
   function handleProgress(e) {
     setCurrentEvent(e);
     handlePopupOpen2();
   }
-  function handleSubmit(e) {
-    // e.preventDefault();
-    // try {
-    //   let res = axios.post('//',
 
-    //   )
-    // } catch (e) {
-    //   console.error(e)
-    // }
-    console.log("form submitted");
+  const createEvent = async () => {
+    try {
+      setRender(false);
+      setLoading(true);
+      console.log(name, type, date, time, desc, img, "...", user.name);
+      let res = await axios.post('http://127.0.0.1:8000/events/',
+      { name: name, type: type, date: date, time: time, desc: desc, image: img, committee: user.name, venue: "djs" }, 
+      { headers: { 'Content-Type': 'application/json'}})
+      console.log(res);
+      setLoading(false);
+      setRender(true);
+      setTimeout(() => {
+        getEventData();
+      }, 300)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    createEvent();
+    // console.log("form submitted");
+    // window.location.href = '/venue';
   }
 
-  let events = [
-    {
-      _id: 1,
-      name: "Hackniche 2.0",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "Comps Dept",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "18-02-2024",
-      time: "09:00",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-      is_approved: true,
-      is_pending: false
-    },
-    {
-      _id: 2,
-      name: "SY3NGY",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "CS DS Dept",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "24-02-2024",
-      time: "10:00",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-        is_approved: true,
-        is_pending: false
-    },
-    {
-      _id: 3,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-        is_approved: false,
-        is_pending: false
-    },
-    {
-      _id: 4,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-        is_approved: false,
-        is_pending: true
-    },
-    {
-      _id: 5,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-        is_approved: true,
-        is_pending: true
-    },
-    {
-      _id: 6,
-      name: "DJS Trinity",
-      committee: {
-        name: "",
-        department: {},
-        email: "",
-        desc: "",
-      },
-      booking: {},
-      venue: {
-        place: "DJS HALL",
-      },
-      regi_members: [],
-      type: "",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.",
-      date: "25-02-2024",
-      time: "19:20",
-      image:
-        "https://img.freepik.com/free-photo/back-view-crowd-fans-watching-live-performance-music-concert-night-copy-space_637285-544.jpg",
-        
-      is_approved: true,
-      is_pending: true
-    },
-  ];
+  let [committeeEventData, setCommitteeEventData] = useState([]);
+
+
+  const getEventData = async () => {
+    try {
+      setCommitteeEventData([])
+      let res = await axios.get('http://127.0.0.1:8000/events/display/', { headers: { 'Content-Type': 'application/json' } });
+      let eventData = await res.data;
+      console.log(eventData); // Check the retrieved data
+      let dummyData = [];
+      eventData.map((e) => {
+        if (e.committee === user.username) {
+          if(!dummyData.includes(e))
+            dummyData.push(e);
+        }
+        setCommitteeEventData(dummyData)
+      });
+      if (committeeEventData != null) setRender(true);
+      console.log(committeeEventData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    setRender(true);
+    getEventData();
   }, []);
+  
   return (
     <div className="h-max">
       <Header />
@@ -217,6 +120,7 @@ function Committee() {
         </div>
         {isPopupOpen && (
           <div className="space-y-6 w-2/6 mx-auto bg-slate-600 p-8 rounded-3xl fixed top-[10rem] left-1/3 shadow-2xl">
+            {loading? <div className="font-bold text-yellow-300">Creating Event...</div> : <div>
             <div
               className="text-red-400 font-bold text-right"
               onClick={handlePopupClose}
@@ -246,18 +150,20 @@ function Committee() {
                   </div>
                   <div className="w-1/2">
                     <label
-                      htmlFor="eventDate"
+                      htmlFor="eventType"
                       className="block font-normal text-slate-200 mb-0.5 pl-1"
                     >
-                      Event Date
+                      Event Type
                     </label>
-                    <input
-                      type="date"
-                      id="eventDate"
-                      onChange={(e) => setDate(e.target.value)}
+                    <select
+                      id="eventType"
+                      onChange={(e) => setType(e.target.value)}
                       required
                       className="p-1 text-md pb-0.5 pl-2 pr-2 rounded-lg w-full focus:outline-none"
-                    />
+                    >
+                      <option value="Select" selected disabled>Select</option>
+                      <option value="education">Education</option>
+                    </select>
                   </div>
                 </div>
                 <div className="w-full mb-4">
@@ -275,6 +181,38 @@ function Committee() {
                     className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
                   />
                 </div>
+                <div className="flex justify-between mb-4">
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="eventDate"
+                      className="block font-normal text-slate-200 mb-0.5 pl-1"
+                    >
+                      Event Date
+                    </label>
+                    <input
+                      type="date"
+                      id="eventDate"
+                      onChange={(e) => setDate(e.target.value)}
+                      required
+                      className="p-1 text-md pb-0.5 pl-2 pr-2 rounded-lg w-full focus:outline-none"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="eventTime"
+                      className="block font-normal text-slate-200 mb-0.5 pl-1"
+                    >
+                      Event Time
+                    </label>
+                    <input
+                      type="time"
+                      id="eventTime"
+                      onChange={(e) => setTime(e.target.value)}
+                      required
+                      className="p-1 pl-2 pr-2 rounded-lg w-11/12 focus:outline-none"
+                    />
+                  </div>
+                </div>
                 <div className="flex justify-between mb-8">
                   <div className="w-full">
                     <label
@@ -284,10 +222,10 @@ function Committee() {
                       Image
                     </label>
                     <input
-                      type="file"
+                      type="text"
                       id="eventImg"
-                      onChange={(e) => handleFile(e)}
-                      accept="image/*"
+                      placeholder="Paste URL of the image"
+                      onChange={(e) => setImg(e.target.value)}
                       required
                       className="p-1 pl-2 pr-2 rounded-lg w-full focus:outline-none"
                     />
@@ -298,11 +236,11 @@ function Committee() {
                     type="submit"
                     value="Check available Venue"
                     className="bg-green-600 text-white hover:bg-green-700 hover:cursor-pointer p-1 w-full rounded-2xl"
-                    onClick={handleClick}
                   />
                 </div>
               </form>
             </div>
+            </div>}
           </div>
         )}
         {isPopupOpen2 && (
@@ -346,11 +284,11 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            events.map((e) => {
+            committeeEventData.map((e) => {
               if(e.is_pending === true){
               return (
                 <div
-                  key={e._id}
+                  key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
                   <img class="w-full" src={e.image} alt="" />
@@ -363,7 +301,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue.place}
+                        <LocationOnIcon /> {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -399,11 +337,11 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            events.map((e) => {
-              if(e.is_pending === false && e.is_approved === true){
+            committeeEventData.map((e) => {
+              if(e.is_approved === true){
               return (
                 <div
-                  key={e._id}
+                  key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
                   <img class="w-full" src={e.image} alt="" />
@@ -416,7 +354,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue.place}
+                        <LocationOnIcon /> {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -452,11 +390,13 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            events.map((e) => {
-              if(e.is_pending === false && e.is_approved === false){
+            committeeEventData.map((e) => {
+              console.log(e.name)
+              if(!e.is_approved){
+                console.log(e.name)
               return (
                 <div
-                  key={e._id}
+                  key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
                   <img class="w-full" src={e.image} alt="" />
@@ -469,7 +409,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue.place}
+                        <LocationOnIcon /> {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">
