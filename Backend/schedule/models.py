@@ -26,6 +26,7 @@ class Booking(models.Model):
     is_approved_dean = models.BooleanField(default=False)
     is_approved_hod = models.BooleanField(default=False)
 
+
     def save(self, *args, **kwargs):
         if self.is_approved_pri and self.is_approved_hod and self.is_approved_mentor and self.is_approved_dean:
             self.is_approved_all = True
@@ -61,6 +62,7 @@ class Event(models.Model):
     date = models.DateField(blank=False, null=False)
     time =  models.TimeField(blank=False, null=False)
     is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
     image = models.CharField(max_length=10000, null=True)
     
 
