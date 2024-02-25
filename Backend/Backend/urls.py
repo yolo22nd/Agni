@@ -12,6 +12,9 @@ urlpatterns = [
     #send email
     path('events/approval/<str:event>/<str:fac_id>/', email_approval, name='create_event'),
 
+    #register
+
+
     #view all events
     path('events/display/', DisplayEvent.as_view({'get': 'list'}), name='view_events'),
     path('events/display/<int:pk>/', DisplayEvent.as_view({'get': 'retrieve'}), name='view_eventdeets'),
@@ -30,6 +33,7 @@ urlpatterns = [
     #view students
     path('students/display/', DisplayStudent.as_view({'get': 'list'}), name='view_students'),
     path('students/display/<str:pk>/', DisplayStudent.as_view({'get': 'retrieve'}), name='view_studentdeets'),
+    path('students/register/', Registration.as_view(), name='register'),
 
     #view faculty
     path('faculty/display/', DisplayFaculty.as_view({'get': 'list'}), name='view_faculty'),

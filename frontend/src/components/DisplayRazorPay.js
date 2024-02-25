@@ -20,18 +20,17 @@ const loadScript =(src)=>{
     })
   }
   
-  const displayRazorPay=async (amount,quantity,name,authTokens,navigate)=>{
-
-    const stock_name=name;
-    let buyStocks = async()=>{
+  const displayRazorPay=async (amount,tickets,event_id,user,navigate)=>{
+    const rollno=user.rollno
+    let buyTickets = async()=>{
       console.log("fetching response");
-      let response = await fetch('http://127.0.0.1:8000/buy/buyStock/', {
+      let response = await fetch('http://127.0.0.1:8000/students/register/', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
-                'Authorization':'Bearer '+String(authTokens.access),
+                // 'Authorization':'Bearer '+String(authTokens.access),
             },
-            body:JSON.stringify({stock_name,quantity})     
+            body:JSON.stringify({rollno,event_id})     
       })
       console.log(response);
     }
@@ -52,9 +51,9 @@ const loadScript =(src)=>{
   
       handler: function (response){
         // alert(response.razorpay_payment_id)
-        alert("Payment successful");
-        buyStocks();
-        navigate('/Portfoliomain');
+        alert("Payment successful, you will be receiving a mail shortly ");
+        buyTickets();
+        navigate('/student');
         // navigate("/session-timed-out");
 
     },

@@ -20,7 +20,7 @@ import { useContext,useEffect } from 'react';
 const defaultTheme = createTheme();
 
 export default function Buy() {
-  let {authTokens} = useContext(AuthContext)
+  let {authTokens, user} = useContext(AuthContext)
   const location = useLocation();
   const navigate= useNavigate();
 //   const stock = { id: 1, name: 'Stock A', price: 100 }
@@ -63,7 +63,7 @@ export default function Buy() {
     console.log({
       totalPrice
     });
-    displayRazorPay(totalPrice,tickets,events.name,authTokens,navigate)
+    displayRazorPay(totalPrice,tickets,eventId,user,navigate)
 
   };
 

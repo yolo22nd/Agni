@@ -131,15 +131,36 @@ class DisplayEventStudentPrevious(viewsets.ModelViewSet):
     serializer_class = EventSerializerAll
 
 
-class DisplayEventStudentPending(viewsets.ModelViewSet):
-    #get facid, event_name
-    #get is_principle/whatever from facid
+class DisplayEventStudentPending(viewsets.ViewSet):
+    serializer_class = EventSerializerAll
 
-    #event name se get booking
-    #new booking list by booking mei run filter for is_approved by whatever false
-    #create new event list for every booking ka event 
+    def list(self, request):
+        fac_id = request.data.get('fac_id')
+        event_id = request.data.get('event_id')
 
-    #return event list
+        try:
+            faculty_obj = Faculty.objects.get(fac_id=fac_id)
+            event_obj = Event.objects.get(id=event_id)
+            booking_obj = Booking.objects.get(event=event_obj)
+
+            event_list = []
+
+            if faculty_obj.is_principle:
+                booking_queryset = Booking.objects.filter(is_approved_pri=False)
+                event_list = [booking.event for booking in booking_queryset]
+            elif faculty_obj.is_hod:
+                booking_queryset = Booking.objects.filter(is_approved_hod=False)
+                event_list = [booking.event for booking in booking_queryset]
+            elif faculty_obj.is_mentor:
+                booking_queryset = Booking.objects.filter(is_approved_mentor=False)
+                event_list = [booking.event for booking in booking_queryset]
+            elif faculty_obj.is_dean:
+                booking_queryset = Booking.objects.filter(is_approved_dean=False)
+                event_list = [booking.event for booking in booking_queryset]
+
+            return Response({'event_list': event_list})
+        except (Faculty.DoesNotExist, Event.DoesNotExist, Booking.DoesNotExist) as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
     queryset = Event.objects.filter(is_rejected=False , is_approved=False)
     serializer_class = EventSerializerAll
@@ -177,6 +198,34 @@ class DisplayFaculty(viewsets.ModelViewSet):
 
     
 class DisplayVenue(viewsets.ModelViewSet):
+
     queryset = Venue.objects.all()
     serializer_class = VenueSerializer
 
+
+class Registration(APIView):
+    def post(self, request):
+        try:
+            new_member_rollno = request.data.get('rollno')
+            event_id = request.data.get('event_id')
+            event_obj = Event.objects.get(id=event_id)
+            student_obj = Student.objects.get(rollno=new_member_rollno)
+            existing_members = event_obj.regi_members
+
+            if existing_members:
+                updated_members = f"{existing_members}, {new_member_rollno}"
+            else:
+                updated_members = new_member_rollno
+
+            event_obj.regi_members = updated_members
+            event_obj.save()
+            subject = f'{event_obj.name} Registration'
+            message = f'You are registered for {event_obj.name} successfully\nFollowing are the details of the event\n{event_obj}'
+            student_email = student_obj.email
+            email_from = settings.EMAIL_HOST_USER
+            send_mail(subject, message, email_from, [student_email])
+            return JsonResponse({'message': 'Member registered successfully'}, status=status.HTTP_201_CREATED)
+        except Event.DoesNotExist:
+            return JsonResponse({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
