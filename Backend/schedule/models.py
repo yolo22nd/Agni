@@ -1,5 +1,8 @@
 from typing import Iterable
 from django.db import models
+from datetime import timedelta, datetime
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -10,6 +13,13 @@ class Venue(models.Model):
     address = models.TextField(max_length=500)
     is_available = models.BooleanField(default=True)
     image = models.CharField(max_length=10000)
+
+    @staticmethod
+    def get_available_venues(date):
+        booked_venues = Booking.objects.filter(date=date).values_list('venue__name', flat=True)
+        available_venues = Venue.objects.exclude(name__in=booked_venues)
+        return available_venues
+
     
     # event = models.ForeignKey('Event', on_delete=models.CASCADE, null=False, blank=False)
 
@@ -28,20 +38,29 @@ class Booking(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if self.is_approved_pri and self.is_approved_hod and self.is_approved_mentor and self.is_approved_dean:
-            self.is_approved_all = True
-            self.event.is_approved = True
-            self.event.save()
-            self.venue.is_available = False
-            self.venue.save()
-        else:
-            self.is_approved_all = False
-            self.event.is_approved = False
-            self.event.save()
-            self.venue.is_available = True
-            self.venue.save()
-        super().save(*args, **kwargs)
-
+            if self.is_approved_pri and self.is_approved_hod and self.is_approved_mentor and self.is_approved_dean:
+                self.is_approved_all = True
+                self.event.is_approved = True
+                self.event.save()
+                self.venue.is_available = False
+                self.venue.save()
+            else:
+                self.is_approved_all = False
+                self.event.is_approved = False
+                self.event.save()
+                self.venue.is_available = True
+                self.venue.save()
+            venue = self.venue
+            venue.is_available = True
+            end_time = timezone.datetime.combine(self.date, self.time) + timedelta(hours=24)
+            end_time = timezone.make_aware(end_time, timezone.get_current_timezone())
+            now = timezone.now()
+            if now < end_time:
+                venue.is_available = False
+            else:
+                venue.is_available = True
+            venue.save()
+            super().save(*args,**kwargs)
 
 class Event(models.Model):
     ENTERTAINMENT = 'entertainment'
