@@ -287,7 +287,7 @@ function Committee() {
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             committeeEventData.map((e) => {
-              if(e.is_pending === true){
+              if(e.is_approved === false && e.is_rejected === false){
               return (
                 <div
                   key={e.id}
@@ -303,7 +303,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue}
+                        <LocationOnIcon />Room {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -340,7 +340,7 @@ function Committee() {
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             committeeEventData.map((e) => {
-              if(e.is_approved === true){
+              if(e.is_approved === true && e.is_rejected === false){
               return (
                 <div
                   key={e.id}
@@ -356,7 +356,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue}
+                        <LocationOnIcon /> Room {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -394,7 +394,7 @@ function Committee() {
           {render &&
             committeeEventData.map((e) => {
               console.log(e.name)
-              if(!e.is_approved){
+              if(e.is_approved === false && e.is_rejected === true){
                 console.log(e.name)
               return (
                 <div
@@ -411,7 +411,7 @@ function Committee() {
                   <div class="px-6 pt-4 pb-2">
                     <div className="flex">
                       <span class="rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2 flex items-center">
-                        <LocationOnIcon /> {e.venue}
+                        <LocationOnIcon /> Room {e.venue}
                       </span>
                     </div>
                     <div className="flex justify-between">

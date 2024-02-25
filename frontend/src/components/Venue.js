@@ -5,7 +5,7 @@ import axios from "axios";
 import "./Venue.css";
 const Venue = () => {
   const [selectedValue, setSelectedValue] = useState("1");
-  const [render, setRender] = useState(true);
+  const [render, setRender] = useState(false);
   const [vacantSeats, setVacantSeats] = useState([]);
   const [vacant, setVacant] = useState("");
 
@@ -22,12 +22,12 @@ const Venue = () => {
       try {
         setVacantSeats([]);
         let res = await axios.post(
-          "http://127.0.0.1:8000/venue/available",
+          "http://127.0.0.1:8000/venue/available/",
           { date: state.date },
           { headers: { "Content-Type": "application/json" } }
         );
-        console.log(res.data);
-        let vacancy = await res.data;
+        console.log(res.data.available_venues );
+        let vacancy = await res.data.available_venues;
         let dummyData = [];
         vacancy.map((v) => {
           if (!dummyData.includes(v)) {
@@ -36,10 +36,17 @@ const Venue = () => {
         });
         setVacantSeats(dummyData);
         vacantSeats.map((v) => {
-          document.getElementById(`${v.name}`).classList.add("vacant");
-          document.getElementById(`${v.name}`).classList.remove("occupied");
+          if(v.name!=="djs"){
+            // console.log(v)
+            let el = document.getElementById(`${v.name}`)
+            // console.log(el)
+            el.classList.add("vacant");
+            el.classList.remove("occupied");
+          }
         });
-        setRender(true);
+        if(vacantSeats){
+          setRender(true);  
+        }
       } catch (error) {
         console.error(error);
       }
@@ -49,6 +56,14 @@ const Venue = () => {
 
   const handleSubmit = async () => {
     try {
+      console.log(state.name,
+        state.type,
+         state.date,
+         state.time,
+         state.desc,
+         state.image,
+         state.committee,
+        vacant,)
       let res = await axios.post(
         "http://127.0.0.1:8000/events/",
         {
@@ -57,9 +72,9 @@ const Venue = () => {
           date: state.date,
           time: state.time,
           desc: state.desc,
-          image: state.imgage,
+          image: state.image,
           committee: state.committee,
-          venue: "",
+          venue: vacant,
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -81,7 +96,7 @@ const Venue = () => {
         setVacant(roomId)
         for (let index = 1; index < 25; index++) {
           const el = document.getElementById(`${index}`);
-          if (el && el.classList.contains("vacant")) {
+          if (el && el.classList.contains("vacant") && index!=roomId) {
             el.classList.remove("selected");
           }
         }
@@ -98,7 +113,7 @@ const Venue = () => {
     } else {
       console.log(roomId, "not found");
     }
-    setVacant(rId)
+    setVacant(roomId)
     console.log("v", vacant);
   };
 
@@ -122,90 +137,90 @@ const Venue = () => {
       </select>
       {render && selectedValue === "1" ? (
         <div className="mt-8 mx-4 mb-2 p-2">
-          <div class="grid grid-cols-12 grid-rows-12 gap-4">
+          <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="1"
               onClick={handleClick}
             >
               Room 1
             </div>
             <div
-              class=" occupied p-16 col-span-3 row-span-3"
+              className=" occupied p-16 col-span-3 row-span-3"
               id="2"
               onClick={handleClick}
             >
               Room 2
             </div>
-            <div class=" occupied p-16 row-span-3" id="3" onClick={handleClick}>
+            <div className=" occupied p-16 row-span-3" id="3" onClick={handleClick}>
               Room 3
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-3"
+              className="occupied p-16 col-span-3 row-span-3"
               id="4"
               onClick={handleClick}
             >
               Room 4
             </div>
             <div
-              class=" vacant p-16 col-span-3 row-span-5"
+              className=" vacant p-16 col-span-3 row-span-5"
               id="5"
               onClick={handleClick}
             >
               Room 5
             </div>
             <div
-              class=" occupied p-16 col-span-2 row-span-6"
+              className=" occupied p-16 col-span-2 row-span-6"
               id="6"
               onClick={handleClick}
             >
               Room 6
             </div>
 
-            <div class="bg-white p-16 col-span-2 row-span-6"></div>
-            <div class="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-16 col-span-2 row-span-6"></div>
 
             <div
-              class="occupied p-16 col-span-3 row-span-6"
+              className="occupied p-16 col-span-3 row-span-6"
               id="7"
               onClick={handleClick}
             >
               Room 7
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-4"
+              className="occupied p-16 col-span-3 row-span-4"
               id="8"
               onClick={handleClick}
             >
               Room 8
             </div>
 
-            <div class=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
-            <div class="bg-white p-16 row-span-3"></div>
+            <div className=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
+            <div className="bg-white p-16 row-span-3"></div>
 
             <div
-              class="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="9"
               onClick={handleClick}
             >
               Room 9
             </div>
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="10"
               onClick={handleClick}
             >
               Room 10
             </div>
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="11"
               onClick={handleClick}
             >
               Room 11
             </div>
             <div
-              class="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-16 col-span-3 row-span-3"
               id="12"
               onClick={handleClick}
             >
@@ -218,86 +233,86 @@ const Venue = () => {
       )}
       {render && selectedValue === "2" ? (
         <div className="mt-8 mx-4 mb-2 p-2">
-          <div class="grid grid-cols-12 grid-rows-12 gap-4">
+          <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="13"
               onClick={handleClick}
             >
               Room 13
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-3"
+              className="occupied p-16 col-span-3 row-span-3"
               id="14"
               onClick={handleClick}
             >
               Room 14
             </div>
-            <div class="occupied p-16 row-span-3" id="15" onClick={handleClick}>
+            <div className="occupied p-16 row-span-3" id="15" onClick={handleClick}>
               Room 15
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-3"
+              className="occupied p-16 col-span-3 row-span-3"
               id="16"
               onClick={handleClick}
             >
               Room 16
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-5"
+              className="occupied p-16 col-span-3 row-span-5"
               id="17"
               onClick={handleClick}
             >
               Room 17
             </div>
             <div
-              class="occupied p-16 col-span-2 row-span-6"
+              className="occupied p-16 col-span-2 row-span-6"
               id="18"
               onClick={handleClick}
             >
               Room 18
             </div>
-            <div class="bg-white p-16 col-span-2 row-span-6"></div>
-            <div class="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-16 col-span-2 row-span-6"></div>
             <div
-              class="occupied p-16 col-span-3 row-span-6"
+              className="occupied p-16 col-span-3 row-span-6"
               id="19"
               onClick={handleClick}
             >
               Room 19
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-4"
+              className="occupied p-16 col-span-3 row-span-4"
               id="20"
               onClick={handleClick}
             >
               Room 20
             </div>
-            <div class="bg-white p-16 col-span-2 row-span-3">Entrance</div>
-            <div class="bg-white p-16 row-span-3"></div>
+            <div className="bg-white p-16 col-span-2 row-span-3">Entrance</div>
+            <div className="bg-white p-16 row-span-3"></div>
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="21"
               onClick={handleClick}
             >
               Room 21
             </div>
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="22"
               onClick={handleClick}
             >
               Room 22
             </div>
             <div
-              class="occupied p-16 col-span-2 row-span-3"
+              className="occupied p-16 col-span-2 row-span-3"
               id="23"
               onClick={handleClick}
             >
               Room 23
             </div>
             <div
-              class="occupied p-16 col-span-3 row-span-3"
+              className="occupied p-16 col-span-3 row-span-3"
               id="24"
               onClick={handleClick}
             >
@@ -317,12 +332,11 @@ const Venue = () => {
           <span>Vacant</span>
         </div>
         <div>
-          <button
-            className="px-4 py-2 bg-slate-900 text-white rounded-full cursor-pointer ml-32 mt-2"
-            onClick={() => handleSubmit}
+          <div className="px-4 py-2 bg-slate-900 text-white rounded-full cursor-pointer ml-32 mt-2"
+            onClick={() => {handleSubmit()}}
           >
             Confirm selection
-          </button>
+          </div>
         </div>
       </div>
     </div>
