@@ -74,16 +74,18 @@ export default function Buy() {
 
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+    // <ThemeProvider theme={defaultTheme}>
+    <Box className='bg-gradient-to-br from-cyan-800 to-indigo-950 h-screen w-full mt-0 p-8 flex justify-center items-center'>
+      <Box component="main" maxWidth="xs" className='w-lg'>
         <CssBaseline />
         <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+          // sx={{
+          //   // marginTop: 8,
+          //   display: 'flex',
+          //   flexDirection: 'column',
+          //   alignItems: 'center',
+          // }}
+          className='bg-white w-96 px-4 flex flex-col items-center justify-center'
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
@@ -136,7 +138,8 @@ export default function Buy() {
             </Grid>
           </Box>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+      </Box>
+    // </ThemeProvider>
   );
 }
