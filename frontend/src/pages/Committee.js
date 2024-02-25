@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Modal } from "flowbite-react";
 import Header from "../components/Header";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -20,23 +19,28 @@ function Committee() {
   const [img, setImg] = useState("");
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isPopupOpen2, setIsPopupOpen2] = useState(false);
+
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
   };
-
   const handlePopupClose = () => {
     setIsPopupOpen(false);
   };
 
-  function onCloseModal2() {
-    setOpenModal2(false);
-  }
+  const handlePopupOpen2 = () => {
+    setIsPopupOpen2(true);
+  };
+  const handlePopupClose2 = () => {
+    setIsPopupOpen2(false);
+  };
+
   function handleFile(e) {
     setName(e.target.files[0]);
   }
   function handleProgress(e) {
     setCurrentEvent(e);
-    setOpenModal2(true);
+    handlePopupOpen2();
   }
   function handleSubmit(e) {
     // e.preventDefault();
@@ -198,7 +202,10 @@ function Committee() {
         </div>
         {isPopupOpen && (
           <div className="space-y-6 w-2/6 mx-auto bg-slate-600 p-8 rounded-3xl fixed top-[10rem] left-1/3 shadow-2xl">
-            <div className="text-red-400 font-bold text-right" onClick={handlePopupClose}>
+            <div
+              className="text-red-400 font-bold text-right"
+              onClick={handlePopupClose}
+            >
               <button>X</button>
             </div>
             <h3 className="text-xl font-medium text-white text-center">
@@ -282,15 +289,14 @@ function Committee() {
             </div>
           </div>
         )}
-        <Modal
-          className="bg-opacity-70"
-          show={openModal2}
-          size="md"
-          onClose={onCloseModal2}
-          popup
-        >
-          <Modal.Header className="text-red-400 w-2/6 mx-auto bg-slate-600 font-bold rounded-tl-2xl rounded-tr-2xl" />
-          <Modal.Body className="w-2/6 m-auto bg-slate-600 p-10 rounded-br-2xl rounded-bl-2xl">
+        {isPopupOpen2 && (
+          <div className="space-y-6 w-3/6 mx-auto bg-slate-600 p-8 rounded-3xl fixed top-[10rem] left-1/4 shadow-2xl">
+            <div
+              className="text-red-400 font-bold text-right"
+              onClick={handlePopupClose2}
+            >
+              <button>X</button>
+            </div>
             <ol class="flex items-center w-full text-sm font-medium text-center text-gray-100 sm:text-base">
               <li class="flex md:w-full items-center text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
@@ -319,8 +325,8 @@ function Committee() {
                 <span class="me-2">3</span> Confirmation
               </li>
             </ol>
-          </Modal.Body>
-        </Modal>
+          </div>
+        )}
         <div className="mt-10 max-w-[1300px] m-auto text-white font-bold text-4xl w-full border-b-4 border-slate-300 pb-4">
           <h1>Your Events</h1>
         </div>
