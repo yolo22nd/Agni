@@ -72,6 +72,13 @@ const Venue = () => {
         </div>
         </div>
       }
+      <div className='mt-4'>
+        <span className='mr-4 font-bold text-xl'>Rooms:</span>
+        <span className='h-8 w-8 bg-gray-200 px-4 py-2 rounded-xl mr-2'></span>
+      <span className='mr-8'>Occupied</span>
+      <span className='h-8 w-8 border-2 border-gray-200 px-4 py-2 rounded-xl mr-2'></span>
+      <span>Vacant</span>
+      </div>
     </div>
   )
 }

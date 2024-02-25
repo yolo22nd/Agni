@@ -34,7 +34,9 @@ function Committee() {
   const handlePopupClose2 = () => {
     setIsPopupOpen2(false);
   };
-
+  const handleClick = () => {
+    window.location.href = '/venue';
+  };
   function handleFile(e) {
     setName(e.target.files[0]);
   }
@@ -296,6 +298,7 @@ function Committee() {
                     type="submit"
                     value="Check available Venue"
                     className="bg-green-600 text-white hover:bg-green-700 hover:cursor-pointer p-1 w-full rounded-2xl"
+                    onClick={handleClick}
                   />
                 </div>
               </form>
