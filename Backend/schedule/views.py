@@ -28,6 +28,14 @@ class createEvent(APIView):
         # data["venue"]=Venue.objects.filter(name=request.data["venue_name"])
         # del data["venue_name"]
         serializer = EventsSerializer(data=request.data)
+        event_name = request.data.get('name')
+        # booking_data = {
+        #     'date' : request.data.get('date'),
+        #     'time' : request.data.get('time'),
+        #     'committee' : request.data.get('committee'),
+        #     'venue' : request.data.get('venue'),
+        #     'event' : 
+        # }
 
         event_name = request.data.get('name')
         if serializer.is_valid():
@@ -62,10 +70,16 @@ def email_send(email, fac_id, event_name, event_data):
 
 # Verifying the email
 def email_approval(request, event, fac_id):
-    faculty_obj = get_object_or_404(Faculty, key=fac_id)
+    faculty_obj = get_object_or_404(Faculty, fac_id=fac_id)
        
     event_obj = Event.objects.get(name=event)
-    booking = Booking.objects.get(event=event_obj)
+    # booking = Booking.objects.get(event=event_obj)
+    booking, created = Booking.objects.get_or_create(
+        date=event_obj.date, 
+        time=event_obj.time,
+        venue=event_obj.venue,  
+        committee=event_obj.committee, 
+        event=event_obj)
 
     if faculty_obj.is_principle == True:
         if not booking.is_approved_pri:
