@@ -1,6 +1,6 @@
 import './App.css'
 import React from 'react';
-import { BrowserRouter ,Routes, Route } from 'react-router-dom'
+import { BrowserRouter ,Routes, Route, } from 'react-router-dom'
 import Homepage from './pages/Homepage';
 import Loginpage from "./pages/Loginpage";
 import Createpage from "./pages/Createpage"
@@ -18,6 +18,7 @@ import { AuthProvider } from './context/AuthContext';
 import Faculty from './pages/Faculty';
 import Student from './components/Student';
 import Venue from './components/Venue';
+import Form from './components/Form';
 
 
 function App() {
@@ -31,18 +32,14 @@ function App() {
               </Route>
 
               <Route element={<CommitteeRoutes/>}>
-                <Route path="/create/:id"  element={<Createpage/>}/>
-                <Route path='/committee' element={<Committee/>}/>
-                <Route path='/venue' element={<Venue/>}/>
-              </Route>
+              <Route path="/create/:id"  element={<Createpage/>}/>
+              <Route path='/committee' element={<Committee/>}/>
+              <Route path='/venue' element={<Venue/>}/></Route>
               <Route element={<FacultyRoutes/>}>
-                <Route path='/Faculty' element={<Faculty/>}/>
-
-              </Route>
-
-                <Route exact path='/pay' element={<DisplayRazorPay/>}/>
-
-                <Route path="/buy/:id"  element={<Buy/>}/>
+              <Route path='/Faculty' element={<Faculty/>}/></Route>
+              <Route exact path='/pay' element={<DisplayRazorPay/>}/>
+              <Route path="/buy/:id"  element={<Buy/>}/>
+              <Route path="/form"  element={<Form/>}/>
                 {/* <Route exact path='/' element={<Homepage/>}/>
                 <Route exact path='/memes' element={<Memepage/>}/>
                 <Route exact path='/saved' element={<Userpage/>}/> */}
