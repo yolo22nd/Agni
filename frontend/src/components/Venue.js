@@ -6,8 +6,9 @@ import "./Venue.css";
 const Venue = () => {
   const [selectedValue, setSelectedValue] = useState("1");
   const [render, setRender] = useState(false);
-  const [vacantSeats, setVacantSeats] = useState([]);
-  const [vacant, setVacant] = useState("");
+  const [occupiedSeats, setOccupiedSeats] = useState([]);
+  const [vacantSeat, setVacantSeat] = useState("");
+  const [committeeEventData, setCommitteeEventData] = useState([]);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -15,55 +16,76 @@ const Venue = () => {
   // Function to handle change in selected value
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+    getVacancy();
+  };
+
+  const getVacancy = async () => {
+    try {
+      let res = await axios.post(
+        "http://127.0.0.1:8000/venue/available/",
+        { date: state.date },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      let occupied = await res.data.unavailable_venues;
+      console.log(occupied);
+      setOccupiedSeats([]);
+      setOccupiedSeats(occupied);
+      console.log(occupiedSeats);
+      setTimeout(() => {
+        if(occupied[0] !== null){
+          occupied.map((o) => {
+            if(o.name !== "djs") {
+              let el = document.getElementById(`${o.name}`);
+              el?.classList.add("occupied");
+              el?.classList.remove("vacant");
+            }
+          });
+        }
+      }, 300);
+      if (occupiedSeats) {
+        setRender(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getEventData = async () => {
+    try {
+      setCommitteeEventData([])
+      let res = await axios.get('http://127.0.0.1:8000/events/display/', { headers: { 'Content-Type': 'application/json' } });
+      let eventData = await res.data;
+      console.log(eventData); // Check the retrieved data
+      let dummyData = [];
+      eventData.map((e) => {
+        if(!dummyData.includes(e))
+          dummyData.push(e);
+        setCommitteeEventData(dummyData)
+      });
+      if (committeeEventData == null) setRender(false);
+      console.log(committeeEventData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
-    const getVacancy = async () => {
-      try {
-        setVacantSeats([]);
-        let res = await axios.post(
-          "http://127.0.0.1:8000/venue/available/",
-          { date: state.date },
-          { headers: { "Content-Type": "application/json" } }
-        );
-        console.log(res.data.available_venues );
-        let vacancy = await res.data.available_venues;
-        let dummyData = [];
-        vacancy.map((v) => {
-          if (!dummyData.includes(v)) {
-            dummyData.push(v);
-          }
-        });
-        setVacantSeats(dummyData);
-        vacantSeats.map((v) => {
-          if(v.name!=="djs"){
-            // console.log(v)
-            let el = document.getElementById(`${v.name}`)
-            // console.log(el)
-            el.classList.add("vacant");
-            el.classList.remove("occupied");
-          }
-        });
-        if(vacantSeats){
-          setRender(true);  
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
     getVacancy();
+    getEventData();
   }, []);
 
   const handleSubmit = async () => {
     try {
-      console.log(state.name,
+      console.log(
+        state.name,
         state.type,
-         state.date,
-         state.time,
-         state.desc,
-         state.image,
-         state.committee,
-        vacant,)
+        state.date,
+        state.time,
+        state.desc,
+        state.image,
+        state.committee,
+        vacantSeat
+      );
       let res = await axios.post(
         "http://127.0.0.1:8000/events/",
         {
@@ -74,7 +96,7 @@ const Venue = () => {
           desc: state.desc,
           image: state.image,
           committee: state.committee,
-          venue: vacant,
+          venue: vacantSeat,
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -90,31 +112,29 @@ const Venue = () => {
     let rId = "";
     console.log("Clicked room id:", roomId);
     const roomElement = document.getElementById(roomId);
-    // Check if the roomElement exists before adding the class
     if (roomId) {
       if (roomElement.classList.contains("vacant")) {
-        setVacant(roomId)
+        setVacantSeat(roomId);
         for (let index = 1; index < 25; index++) {
           const el = document.getElementById(`${index}`);
-          if (el && el.classList.contains("vacant") && index!=roomId) {
+          if (el && el.classList.contains("vacant") && index != roomId) {
             el.classList.remove("selected");
           }
         }
         if (roomElement.classList.contains("selected")) {
           roomElement.classList.remove("selected");
-          rId = '';
+          rId = "";
         } else {
           roomElement.classList.add("selected");
-          rId = roomId;
+          setVacantSeat(roomId);
         }
       } else {
-        rId = '';
+        rId = "";
       }
     } else {
       console.log(roomId, "not found");
     }
-    setVacant(roomId)
-    console.log("v", vacant);
+    console.log("v", vacantSeat);
   };
 
   return (
@@ -139,28 +159,52 @@ const Venue = () => {
         <div className="mt-8 mx-4 mb-2 p-2">
           <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className=" vacant p-16 col-span-2 row-span-3"
               id="1"
               onClick={handleClick}
             >
               Room 1
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '1'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className=" occupied p-16 col-span-3 row-span-3"
+              className=" vacant p-16 col-span-3 row-span-3"
               id="2"
               onClick={handleClick}
             >
               Room 2
-            </div>
-            <div className=" occupied p-16 row-span-3" id="3" onClick={handleClick}>
-              Room 3
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '2'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-3"
+              className=" vacant p-16 row-span-3"
+              id="3"
+              onClick={handleClick}
+            >
+              Room 3
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '3'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
+            </div>
+            <div
+              className="vacant p-16 col-span-3 row-span-3"
               id="4"
               onClick={handleClick}
             >
               Room 4
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '4'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
               className=" vacant p-16 col-span-3 row-span-5"
@@ -168,31 +212,51 @@ const Venue = () => {
               onClick={handleClick}
             >
               Room 5
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '5'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className=" occupied p-16 col-span-2 row-span-6"
+              className=" vacant p-16 col-span-2 row-span-6"
               id="6"
               onClick={handleClick}
             >
               Room 6
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '6'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
 
             <div className="bg-white p-16 col-span-2 row-span-6"></div>
             <div className="bg-white p-16 col-span-2 row-span-6"></div>
 
             <div
-              className="occupied p-16 col-span-3 row-span-6"
+              className="vacant p-16 col-span-3 row-span-6"
               id="7"
               onClick={handleClick}
             >
               Room 7
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '7'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-4"
+              className="vacant p-16 col-span-3 row-span-4"
               id="8"
               onClick={handleClick}
             >
               Room 8
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '8'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
 
             <div className=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
@@ -204,20 +268,35 @@ const Venue = () => {
               onClick={handleClick}
             >
               Room 9
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '9'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="10"
               onClick={handleClick}
             >
               Room 10
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '10'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="11"
               onClick={handleClick}
             >
               Room 11
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '11'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
               className="vacant p-16 col-span-3 row-span-3"
@@ -225,98 +304,167 @@ const Venue = () => {
               onClick={handleClick}
             >
               Room 12
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '12'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
           </div>
         </div>
       ) : (
-        <div className="h-[50rem]"></div>
+        <div></div>
       )}
       {render && selectedValue === "2" ? (
         <div className="mt-8 mx-4 mb-2 p-2">
           <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="13"
               onClick={handleClick}
             >
               Room 13
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '13'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-3"
+              className="vacant p-16 col-span-3 row-span-3"
               id="14"
               onClick={handleClick}
             >
               Room 14
-            </div>
-            <div className="occupied p-16 row-span-3" id="15" onClick={handleClick}>
-              Room 15
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '14'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-3"
+              className="vacant p-16 row-span-3"
+              id="15"
+              onClick={handleClick}
+            >
+              Room 15
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '15'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
+            </div>
+            <div
+              className="vacant p-16 col-span-3 row-span-3"
               id="16"
               onClick={handleClick}
             >
               Room 16
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '16'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-5"
+              className="vacant p-16 col-span-3 row-span-5"
               id="17"
               onClick={handleClick}
             >
               Room 17
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '17'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-2 row-span-6"
+              className="vacant p-16 col-span-2 row-span-6"
               id="18"
               onClick={handleClick}
             >
               Room 18
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '18'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div className="bg-white p-16 col-span-2 row-span-6"></div>
             <div className="bg-white p-16 col-span-2 row-span-6"></div>
             <div
-              className="occupied p-16 col-span-3 row-span-6"
+              className="vacant p-16 col-span-3 row-span-6"
               id="19"
               onClick={handleClick}
             >
               Room 19
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '19'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-4"
+              className="vacant p-16 col-span-3 row-span-4"
               id="20"
               onClick={handleClick}
             >
               Room 20
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '20'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div className="bg-white p-16 col-span-2 row-span-3">Entrance</div>
             <div className="bg-white p-16 row-span-3"></div>
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="21"
               onClick={handleClick}
             >
               Room 21
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '21'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="22"
               onClick={handleClick}
             >
               Room 22
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '22'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-2 row-span-3"
+              className="vacant p-16 col-span-2 row-span-3"
               id="23"
               onClick={handleClick}
             >
               Room 23
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '23'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
             <div
-              className="occupied p-16 col-span-3 row-span-3"
+              className="vacant p-16 col-span-3 row-span-3"
               id="24"
               onClick={handleClick}
             >
               Room 24
+              <p className="text-indigo-600">{committeeEventData? committeeEventData.map((c) => {
+                if(c.venue === '24'){
+                  return `occupied by ${c.name}`
+                }
+              }) : ''}</p>
             </div>
           </div>
         </div>
@@ -332,8 +480,11 @@ const Venue = () => {
           <span>Vacant</span>
         </div>
         <div>
-          <div className="px-4 py-2 bg-slate-900 text-white rounded-full cursor-pointer ml-32 mt-2"
-            onClick={() => {handleSubmit()}}
+          <div
+            className="px-4 py-2 bg-slate-900 text-white rounded-full cursor-pointer ml-32 mt-2"
+            onClick={() => {
+              handleSubmit();
+            }}
           >
             Confirm selection
           </div>
