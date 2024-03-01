@@ -22,6 +22,7 @@ const Student = () => {
       };
       var eventId=1;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [render, setRender] = useState(false);
 
   const handlePopupOpen = (e) => {
     setCurrentEvent(e);
@@ -49,6 +50,9 @@ const Student = () => {
       }
       const data = await response.json();
       setEvents(data);
+      if(events){
+        setRender(true)
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -103,7 +107,7 @@ const Student = () => {
         </div>
       )}
         </div> */}
-        {events.map((event, index) => (
+        {render && events.map((event, index) => (
         <div key={index} className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
           <img src={event.image} className='h-64 w-80 rounded-tr-3xl'></img>    
           <p className='text-slate-900 text-3xl mt-2 font-bold'>{event.name}</p>
