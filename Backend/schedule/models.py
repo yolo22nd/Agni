@@ -30,6 +30,7 @@ class Booking(models.Model):
     committee = models.ForeignKey('base.Committee', on_delete=models.CASCADE, blank=False, null=False)
     venue = models.ForeignKey('Venue', on_delete=models.CASCADE, blank=False, null=False)
     event = models.ForeignKey('Event', on_delete=models.CASCADE, null=False, blank=False)
+    is_terminated = models.BooleanField(default = False)
     is_approved_all = models.BooleanField(default=False)
     is_approved_pri = models.BooleanField(default=False)
     is_approved_mentor = models.BooleanField(default=False)
