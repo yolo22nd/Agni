@@ -27,6 +27,10 @@ urlpatterns = [
     path('events/display/student/previous/', DisplayEventStudentPrevious.as_view({'get': 'list'}), name='view_previous_events'),
     path('events/display/student/<int:pk>/', DisplayEventStudentApproved.as_view({'get': 'retrieve'}), name='view_approved_eventdeets'),
 
+    #view pending bookings all
+    path('booking/display/', DisplayBookingsPending.as_view({'get' : 'list'}), name='view_bookings'),
+
+
     #view committees
     path('committee/display/', DisplayCommittee.as_view({'get': 'list'}), name='view_committees'),
     path('committee/display/<str:pk>/', DisplayCommittee.as_view({'get': 'retrieve'}), name='view_committeedeets'),

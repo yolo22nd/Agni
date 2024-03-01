@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Q
 from schedule.serializers import *
 from base.models import *
 from base.serializers import *
@@ -132,21 +133,20 @@ def email_approval(request, event, fac_id):
 
 class DisplayEventStudentApproved(viewsets.ModelViewSet):
     queryset = Booking.objects.filter(is_terminated=True)
-    serializer_class = EventSerializerAll
+    serializer_class = BookingSerializerAll
 
 class DisplayEventStudentRejected(viewsets.ModelViewSet):
     queryset = Booking.objects.filter(is_terminated=True, is_approved_all=False)
-    serializer_class = EventSerializerAll
-
-from django.db.models import Q
+    serializer_class = BookingSerializerAll
 
 class DisplayEventStudentPrevious(viewsets.ModelViewSet):
     queryset = Event.objects.filter(Q(is_approved=True) | Q(is_rejected=True), date__lt=timezone.now())
     serializer_class = EventSerializerAll
 
+class DisplayBookingsPending(viewsets.ModelViewSet):
+    queryset = Booking.objects.filter(is_terminated=True)
+    serializer_class = BookingSerializerAll
 
-from rest_framework.response import Response
-from rest_framework import status
 
 class DisplayEventStudentPending(viewsets.ViewSet):
     serializer_class = EventSerializerAll

@@ -25,6 +25,10 @@ class EventSerializerAll(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
 
+class BookingSerializerAll(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = '__all__'
 
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
