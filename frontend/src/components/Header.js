@@ -6,6 +6,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { styled } from '@mui/system';
+import e from '../assets/e.png'
 
 function SidebarContent() {
   return (
@@ -63,7 +64,11 @@ const Header = () => {
           Saved Memes
         </Button> */}
         <Box sx={{ flexGrow: 0.42 }} />
-        {user && <Typography variant="h6">Hello {user.username} !</Typography>}
+        <div className='flex justify-center ml-4 w-full'>
+          <img src={e} alt="" className='w-10 h-10 mr-4 border border-gray-700 rounded-full'/>
+          <h1 className='text-2xl font-bold'>EventWizz</h1>
+        </div>
+        {/* {user && <Typography variant="h6">Hello {user.username} !</Typography>} */}
         <Box sx={{ flexGrow: 0.58 }} />
         <SearchOutlinedIcon fontSize='medium'/>
         <Box className="search px-2 py-1">

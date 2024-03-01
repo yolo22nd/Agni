@@ -185,7 +185,7 @@ function Faculty() {
                   <div className="flex justify-between h-full">
                     <div className="h-full flex">
                       <div className="flex items-center h-full">
-                        <img src={e.image} alt="" className="w-56 ml-5" />
+                        <img src={e.image} alt="" className="w-56 ml-5 h-32" />
                       </div>
                       <div className="pl-3 pt-2">
                         <div className="text-white text-left font-bold text-4xl">
@@ -245,7 +245,7 @@ function Faculty() {
                   <div className="flex justify-between h-full">
                     <div className="h-full flex">
                       <div className="flex items-center h-full">
-                        <img src={e.image} alt="" className="w-56 ml-5" />
+                        <img src={e.image} alt="" className="w-56 ml-5 h-32" />
                       </div>
                       <div className="pl-3 pt-2">
                         <div className="text-white text-left font-bold text-4xl">
