@@ -131,17 +131,17 @@ def email_approval(request, event, fac_id):
 
 
 class DisplayEventStudentApproved(viewsets.ModelViewSet):
-    queryset = Event.objects.filter(is_approved=True)
+    queryset = Booking.objects.filter(is_terminated=True)
     serializer_class = EventSerializerAll
 
 class DisplayEventStudentRejected(viewsets.ModelViewSet):
-    queryset = Event.objects.filter(is_rejected=True)
+    queryset = Booking.objects.filter(is_terminated=True, is_approved_all=False)
     serializer_class = EventSerializerAll
 
 from django.db.models import Q
 
 class DisplayEventStudentPrevious(viewsets.ModelViewSet):
-    queryset = Event.objects.filter(Q(is_approved=True) | Q(is_rejected=True))
+    queryset = Event.objects.filter(Q(is_approved=True) | Q(is_rejected=True), date__lt=timezone.now())
     serializer_class = EventSerializerAll
 
 
