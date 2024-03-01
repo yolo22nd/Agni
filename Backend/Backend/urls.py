@@ -28,7 +28,7 @@ urlpatterns = [
     path('events/display/student/<int:pk>/', DisplayEventStudentApproved.as_view({'get': 'retrieve'}), name='view_approved_eventdeets'),
 
     #view pending bookings all
-    path('booking/display/', DisplayBookingsPending.as_view({'get' : 'list'}), name='view_bookings'),
+    path('booking/display/', DisplayBookingsPrevious.as_view({'get' : 'list'}), name='view_bookings'),
 
 
     #view committees
@@ -40,6 +40,7 @@ urlpatterns = [
     path('students/display/<str:pk>/', DisplayStudent.as_view({'get': 'retrieve'}), name='view_studentdeets'),
     path('students/register/', Registration.as_view(), name='register'),
 
+    
     #view faculty
     path('faculty/display/', DisplayFaculty.as_view({'get': 'list'}), name='view_faculty'),
     path('faculty/display/<str:pk>/', DisplayFaculty.as_view({'get': 'retrieve'}), name='view_facultydeets'),
@@ -49,5 +50,8 @@ urlpatterns = [
     path('venue/display/<str:pk>/', DisplayVenue.as_view({'get': 'retrieve'}), name='view_venuedeets'),
     path('venue/available/', VenueAvailable.as_view(), name='view_venues_available'),
 
+
+    # students registered for event
+    path('venue/display/', DisplayVenue.as_view({'get': 'list'}), name='view_venues'),
 ]
 

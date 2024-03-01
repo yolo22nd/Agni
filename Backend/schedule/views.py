@@ -131,23 +131,52 @@ def email_approval(request, event, fac_id):
 
 
 
-class DisplayEventStudentApproved(viewsets.ModelViewSet):
+# class DisplayEventStudentApproved(viewsets.ModelViewSet):
+#     queryset = Booking.objects.filter(is_terminated=True)
+#     serializer_class = BookingSerializerAll
+
+# class DisplayEventStudentRejected(viewsets.ModelViewSet):
+#     queryset = Booking.objects.filter(is_terminated=True, is_approved_all=False)
+#     serializer_class = BookingSerializerAll
+
+# class DisplayEventStudentPrevious(viewsets.ModelViewSet):
+#     queryset = Event.objects.filter(Q(is_approved=True) | Q(is_rejected=True), date__lt=timezone.now())
+#     serializer_class = EventSerializerAll
+
+
+#Committee Approved
+class DisplayEventStudentApproved(APIView):
+    def get(self, request):
+        committee_obj = Committee.objects.get(name=request.data.get('name'))
+        events = Event.objects.filter(committee=committee_obj.name)
+        serialized_events = EventSerializerAll(events, many=True)
+        return Response(serialized_events.data, status=status.HTTP_200_OK)
+
+#Committee Rejected
+class DisplayEventStudentRejected(APIView):
+    def get(self, request):
+        committee_obj = Committee.objects.get(name=request.data.get('name'))
+        events = Booking.objects.filter(committee=committee_obj.name, is_approved_all=False, is_terminated=True)
+        serialized_events = BookingSerializerAll(events, many=True)
+        return Response(serialized_events.data, status=status.HTTP_200_OK)
+
+#Committee Previous
+class DisplayEventStudentPending(APIView):
+    def get(self, request):
+        committee_obj = Committee.objects.get(name=request.data.get('name'))
+        events = Booking.objects.filter(committee=committee_obj.name, is_terminated=False)
+        serialized_events = BookingSerializerAll(events, many=True)
+        return Response(serialized_events.data, status=status.HTTP_200_OK)
+    
+
+
+#Faculty Previous
+class DisplayBookingsPrevious(viewsets.ModelViewSet):
     queryset = Booking.objects.filter(is_terminated=True)
     serializer_class = BookingSerializerAll
 
-class DisplayEventStudentRejected(viewsets.ModelViewSet):
-    queryset = Booking.objects.filter(is_terminated=True, is_approved_all=False)
-    serializer_class = BookingSerializerAll
 
-class DisplayEventStudentPrevious(viewsets.ModelViewSet):
-    queryset = Event.objects.filter(Q(is_approved=True) | Q(is_rejected=True), date__lt=timezone.now())
-    serializer_class = EventSerializerAll
-
-class DisplayBookingsPending(viewsets.ModelViewSet):
-    queryset = Booking.objects.filter(is_terminated=True)
-    serializer_class = BookingSerializerAll
-
-
+# Faculty Pending
 class DisplayEventStudentPending(viewsets.ViewSet):
     serializer_class = EventSerializerAll
 
@@ -220,7 +249,6 @@ class DisplayFaculty(viewsets.ModelViewSet):
 
     
 class DisplayVenue(viewsets.ModelViewSet):
-
     queryset = Venue.objects.all()
     serializer_class = VenueSerializer
 
@@ -268,3 +296,11 @@ class VenueAvailable(APIView):
         # serializer_class = VenueSerializer
 
         return JsonResponse({"available_venues": serialized_venues,"unavailable_venues":serialized_unavailable_venues})
+
+
+
+class RegisteredStudents(APIView):
+    def get(self, request):
+        event_obj = Event.objects.get(name=request.data.get('name'))
+        registered_students = event_obj.regi_members.split(', ')
+        return Response(registered_students, status=status.HTTP_200_OK)
