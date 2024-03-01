@@ -3,12 +3,14 @@ import Header from "../components/Header";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 function Faculty() {
   const [render, setRender] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [pendingevents,setPendingEvents] = useState([]);
   const [events,setEvents] = useState([]);
   const {user} = useContext(AuthContext)
@@ -38,10 +40,8 @@ function Faculty() {
     if (response.status === 200) {
       setPendingEvents(data.event_list);
       console.log('events set')
-  } 
-  // else if (response.statusText === 'Unauthorized'){
-  //   logOutUser()
-  // }  
+  }
+  
 }
 
   let getEvents = async()=>{
@@ -136,6 +136,11 @@ function Faculty() {
     }
   }
 
+  let handlePopup = (e) => {
+    setCurrentEvent(e);
+    setIsPopupOpen(true);
+  }
+
   // let events = [
   //   {
   //     _id: 123456,
@@ -195,7 +200,7 @@ function Faculty() {
                           <div className="text-slate-100 text-left font-medium">
                             Venue:{" "}
                             <span className="font-normal text-md">
-                              {e.venue}
+                              Room {e.venue}
                             </span>
                           </div>
                           <div className="text-slate-100 text-left font-medium ml-5">
@@ -207,7 +212,7 @@ function Faculty() {
                         </div>
                       </div>
                       <div className="h-5/6 my-auto flex items-end ml-10">
-                        <span className="pb-1 text-sky-400 underline hover:cursor-pointer hover:text-sky-500">
+                        <span className="pb-1 text-sky-400 underline hover:cursor-pointer hover:text-sky-500" onClick={() => {handlePopup(e)}}>
                           View More
                         </span>
                       </div>
@@ -255,7 +260,7 @@ function Faculty() {
                           <div className="text-slate-100 text-left font-medium">
                             Venue:{" "}
                             <span className="font-normal text-md">
-                              {e.venue.place}
+                              Room {e.venue}
                             </span>
                           </div>
                           <div className="text-slate-100 text-left font-medium ml-5">
@@ -267,7 +272,7 @@ function Faculty() {
                         </div>
                       </div>
                       <div className="h-5/6 my-auto flex items-end ml-10">
-                        <span className="pb-1 text-sky-400 underline hover:cursor-pointer hover:text-sky-500">
+                        <span className="pb-1 text-sky-400 underline hover:cursor-pointer hover:text-sky-500" onClick={() => handlePopup(e)}>
                           View More
                         </span>
                       </div>
@@ -282,6 +287,19 @@ function Faculty() {
                         Rejected <CloseIcon />
                       </div>
             }
+            {isPopupOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg h-auto w-96 relative">
+            <h2 className='font-bold text-blue-900 text-2xl mb-2'>{currentEvent.name}</h2>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Description: <span className='text-black font-medium text-sm'>{currentEvent.desc}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Date: <span className='text-black font-medium text-sm'>{currentEvent.date}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Time: <span className='text-black font-medium text-sm'>{currentEvent.time}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Location: <span className='text-black font-medium text-sm'>{currentEvent.venue}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Committee: <span className='text-black font-medium text-sm'>{currentEvent.committee}</span></h3>
+            <button onClick={() => setIsPopupOpen(false)} className='absolute top-0 right-0 p-2'><CloseOutlinedIcon/></button>
+          </div>
+        </div>
+      )}
                     </div>
                   </div>
                 </div>
