@@ -25,6 +25,17 @@ class Venue(models.Model):
 
 
 class Booking(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    type = models.CharField(max_length=50, blank=False, null=False, choices=EVENT_TYPES)
+    desc = models.TextField(max_length=1000)
+    ENTERTAINMENT = 'entertainment'
+    EDUCATION = 'education'
+
+    EVENT_TYPES = [
+        (ENTERTAINMENT, 'entertainment'),
+        (EDUCATION, 'education')
+    ]
+
     date = models.DateField(blank=False, null=False)
     time =  models.TimeField(blank=False, null=False)
     committee = models.ForeignKey('base.Committee', on_delete=models.CASCADE, blank=False, null=False)
@@ -63,6 +74,7 @@ class Booking(models.Model):
             venue.save()
             super().save(*args,**kwargs)
 
+
 class Event(models.Model):
     ENTERTAINMENT = 'entertainment'
     EDUCATION = 'education'
@@ -84,6 +96,3 @@ class Event(models.Model):
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
     image = models.CharField(max_length=10000, null=True)
-    
-
-    
