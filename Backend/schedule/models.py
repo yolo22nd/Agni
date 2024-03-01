@@ -25,17 +25,16 @@ class Venue(models.Model):
 
 
 class Booking(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    type = models.CharField(max_length=50, blank=False, null=False, choices=EVENT_TYPES)
-    desc = models.TextField(max_length=1000)
     ENTERTAINMENT = 'entertainment'
     EDUCATION = 'education'
-
     EVENT_TYPES = [
         (ENTERTAINMENT, 'entertainment'),
         (EDUCATION, 'education')
     ]
-
+    
+    name = models.CharField(max_length=200, unique=True)
+    type = models.CharField(max_length=50, blank=False, null=False, choices=EVENT_TYPES)
+    desc = models.TextField(max_length=1000)
     date = models.DateField(blank=False, null=False)
     time =  models.TimeField(blank=False, null=False)
     committee = models.ForeignKey('base.Committee', on_delete=models.CASCADE, blank=False, null=False)

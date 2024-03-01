@@ -21,14 +21,14 @@ from base.serializers import *
 
 class createEvent(APIView):
     def post(self, request):
-        data = request.data.copy()
+        # data = request.data.copy()
         # data['user'] = user.id  # Add the user id to the data
 
         # data["committee"]=Committee.objects.filter(name=request.data["committee_name"])
         # del data["committee_name"]
         # data["venue"]=Venue.objects.filter(name=request.data["venue_name"])
         # del data["venue_name"]
-        serializer = EventsSerializer(data=request.data)
+        serializer = BookingSerializer(data=request.data)
         event_name = request.data.get('name')
         # booking_data = {
         #     'date' : request.data.get('date'),
@@ -38,14 +38,13 @@ class createEvent(APIView):
         #     'event' : 
         # }
 
-        event_name = request.data.get('name')
         if serializer.is_valid():
             try:
                 serializer.save()
-                event_obj=Event.objects.get(name=event_name)
-                booking_obj, created = Booking.objects.get_or_create(event=event_obj,venue= event_obj.venue, date=event_obj.date, time=event_obj.time,committee=event_obj.committee)
+                # event_obj=Event.objects.get(name=event_name)
+                # booking_obj, created = Booking.objects.get_or_create(event=event_obj,venue= event_obj.venue, date=event_obj.date, time=event_obj.time,committee=event_obj.committee)
                 # booking_obj.is_approved_all=False
-                booking_obj.save()
+                # booking_obj.save()
 
                 principle = Faculty.objects.get(is_principle=True)
                 hod = Faculty.objects.get(is_hod=True)
@@ -85,38 +84,37 @@ def email_send(email, name, event_name, event_data):
 # Verifying the email
 def email_approval(request, event, fac_id):
     faculty_obj = get_object_or_404(Faculty, fac_id=fac_id)
-       
-    event_obj = Event.objects.get(name=event)
+    booking_obj = Event.objects.get(name=event)
     # booking = Booking.objects.get(event=event_obj)
-    booking, created = Booking.objects.get_or_create(
-        date=event_obj.date, 
-        time=event_obj.time,
-        venue=event_obj.venue,  
-        committee=event_obj.committee, 
-        event=event_obj)
+    # booking, created = Booking.objects.get_or_create(
+    #     date=event_obj.date, 
+    #     time=event_obj.time,
+    #     venue=event_obj.venue,  
+    #     committee=event_obj.committee, 
+    #     event=event_obj)
 
     if faculty_obj.is_principle == True:
-        if not booking.is_approved_pri:
-            booking.is_approved_pri = True
-            booking.save()
+        if not booking_obj.is_approved_pri:
+            booking_obj.is_approved_pri = True
+            booking_obj.save()
             return JsonResponse({'message' : 'Approved by principle'})
     
     if faculty_obj.is_hod == True:
-        if not booking.is_approved_hod:
-            booking.is_approved_hod = True
-            booking.save()
+        if not booking_obj.is_approved_hod:
+            booking_obj.is_approved_hod = True
+            booking_obj.save()
             return JsonResponse({'message' : 'Approved by hod'})
 
     if faculty_obj.is_mentor == True:
-        if not booking.is_approved_mentor:
-            booking.is_approved_mentor = True
-            booking.save()
+        if not booking_obj.is_approved_mentor:
+            booking_obj.is_approved_mentor = True
+            booking_obj.save()
             return JsonResponse({'message' : 'Approved by mentor'})
         
     if faculty_obj.is_dean == True:
-        if not booking.is_approved_dean:
-            booking.is_approved_dean = True
-            booking.save()
+        if not booking_obj.is_approved_dean:
+            booking_obj.is_approved_dean = True
+            booking_obj.save()
             return JsonResponse({'message' : 'Approved by dean'})
     
     # if not faculty_obj.is_verified:

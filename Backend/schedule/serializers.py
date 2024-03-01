@@ -14,6 +14,11 @@ class EventsSerializer(serializers.ModelSerializer):
         #     committee = Committee.objects.get(name=comm)
         #     return Event.objects.create(committee=committee, **validated_data)
 
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['name', 'type', 'date', 'time', 'desc', 'image']
+        # fields = '__all__'
 
 class EventSerializerAll(serializers.ModelSerializer):
     class Meta:
