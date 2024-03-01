@@ -71,6 +71,7 @@ def encrypt_name(name):
     encoded_name = encoded_bytes.decode('utf-8')
     return encoded_name
 
+
 def email_send(email, name, event_name, event_data):
     subject = 'click the link to approve the event'
     # message = f'{event_data}\nClick on the link to approve this event http://127.0.0.1:8000/events/approval/{event_name}/{fac_id}/'
