@@ -9,8 +9,6 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 
 function Committee() {
   const [render, setRender] = useState(false);
@@ -258,20 +256,27 @@ function Committee() {
             <ol class="flex items-center w-full text-sm font-medium text-center text-gray-100 sm:text-base">
               <li class="flex md:w-full items-center text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                {(!currentEvent.is_approved  && !currentEvent.is_rejected )? "" : <CheckCircleIcon/>}
-                  <span class="hidden sm:inline-flex sm:ms-2">{(!currentEvent.is_approved  && !currentEvent.is_rejected )? "Pending" : "Passed Forward"}</span>
+                  {currentEvent.is_pending? "" : <svg
+                    class="w-5 h-5 sm:w-8 sm:h-8 me-2.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                >
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                </svg>}
+                  <span class="hidden sm:inline-flex sm:ms-2">{currentEvent.is_pending? "Pending" : "Passed Forward"}</span>
                 </span>
               </li>
               <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                 <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-500">
-                {!currentEvent.is_approved? (!currentEvent.is_rejected? "" : <CancelIcon/>) : <CheckCircleIcon/>}
                   <span class="hidden sm:inline-flex sm:ms-2">
-                  {!currentEvent.is_approved? (!currentEvent.is_rejected? "Pending" : "Rejected") : "Approved"}
+                  {currentEvent.is_pending? "Approval Status" : (currentEvent.is_approved? "Approved" : "Rejected")}
                   </span>
                 </span>
               </li>
               <li class="flex items-center">
-                <span class="me-2">{!currentEvent.is_approved? (!currentEvent.is_rejected? "Pending" : "-") : currentEvent.date}</span>
+                <span class="me-2">{currentEvent.is_pending? "Approval Status" : (currentEvent.is_approved? currentEvent.date : "-")}</span>
               </li>
             </ol>
           </div>
@@ -288,7 +293,7 @@ function Committee() {
                   key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
-                  <img class="w-full" src={e.image} alt="" />
+                  <img class="w-full h-64" src={e.image} alt="" />
                   <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2 text-white">
                       {e.name}
@@ -341,7 +346,7 @@ function Committee() {
                   key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
-                  <img class="w-full" src={e.image} alt="" />
+                  <img class="w-full h-64" src={e.image} alt="" />
                   <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2 text-white">
                       {e.name}
@@ -376,6 +381,9 @@ function Committee() {
                         </Link>
                       </div>
                     </div>
+                      <div>
+                        <button className="text-white bg-blue-900 px-2 py-2 rounded-full mb-2 cursor-pointer hover:bg-blue-800" onClick={() => navigate('/details')}>View details</button>
+                      </div>
                   </div>
                 </div>
               );
@@ -396,7 +404,7 @@ function Committee() {
                   key={e.id}
                   class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-black mb-8"
                 >
-                  <img class="w-full" src={e.image} alt="" />
+                  <img class="w-full h-64" src={e.image} alt="" />
                   <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2 text-white">
                       {e.name}

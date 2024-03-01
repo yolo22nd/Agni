@@ -10,6 +10,7 @@ const Form = () => {
       setPass(e.target.value);
     };
     const navigate = useNavigate();
+
     const handleSubmit = () => {
         console.log(pass)
       navigate('/faculty');
@@ -33,7 +34,8 @@ const Form = () => {
                     className="p-1 pl-2 pr-2 rounded-lg w-lg focus:outline-none"
                 />
                 <div>
-                <button type='submit' className='px-6 py-2 bg-slate-900 text-white rounded-full cursor-pointer mt-2 w-lg' onClick={handleSubmit}>OK</button>
+                <button type='submit' className='px-6 py-2 mt-4 text-white rounded-full cursor-pointer mt-2 w-lg bg-red-700 mr-4 hover:bg-red-600' onClick={handleSubmit}>Accept</button>
+                <button type='submit' className='px-6 py-2 mt-4 text-white rounded-full cursor-pointer mt-2 w-lg bg-green-600 hover:bg-green-500' onClick={handleSubmit}>Reject</button>
                 </div>
     </div>
   )

@@ -19,6 +19,7 @@ import Faculty from './pages/Faculty';
 import Student from './components/Student';
 import Venue from './components/Venue';
 import Form from './components/Form';
+import DetailsPage from './pages/DetailsPage';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route exact path='/pay' element={<DisplayRazorPay/>}/>
               <Route path="/buy/:id"  element={<Buy/>}/>
               <Route path="/form"  element={<Form/>}/>
+              <Route path="/details"  element={<DetailsPage/>}/>
                 {/* <Route exact path='/' element={<Homepage/>}/>
                 <Route exact path='/memes' element={<Memepage/>}/>
                 <Route exact path='/saved' element={<Userpage/>}/> */}
