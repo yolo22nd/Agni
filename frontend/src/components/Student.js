@@ -70,13 +70,13 @@ const Student = () => {
     <div className='max-w-screen-2xl mx-auto'>
     <Slider {...settings} position='fixed'>
       <div >
-        <img src={slide1} alt="" className=' w-full'></img>
+        <img src={slide1} alt="" className=' w-full h-[70vh]'></img>
       </div>
       <div>
-        <img src={slide1} alt="" className='w-full'></img>
+        <img src={"https://www.adobe.com/content/dam/www/us/en/events/overview-page/eventshub_evergreen_opengraph_1200x630_2x.jpg"} alt="" className='w-full h-[70vh]'></img>
       </div>
       <div>
-        <img src={slide1} alt="" className='w-full'></img>
+        <img src={"https://www.pcma.org/wp-content/uploads/2018/10/trillion-main.jpg"} alt="" className='w-full h-[70vh]'></img>
       </div>
     </Slider>
       </div>
