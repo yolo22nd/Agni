@@ -5,7 +5,7 @@ import axios from "axios";
 import "./Venue.css";
 const Venue = () => {
   const [selectedValue, setSelectedValue] = useState("1");
-  const [render, setRender] = useState(false);
+  const [render, setRender] = useState(true);
   const [occupiedSeats, setOccupiedSeats] = useState([]);
   const [vacantSeat, setVacantSeat] = useState("");
   const [committeeEventData, setCommitteeEventData] = useState([]);
@@ -159,7 +159,7 @@ const Venue = () => {
         <div className="mt-8 mx-4 mb-2 p-2">
           <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              className=" vacant p-16 col-span-2 row-span-3"
+              className=" vacant p-12 col-span-2 row-span-3"
               id="1"
               onClick={handleClick}
             >
@@ -171,7 +171,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className=" vacant p-16 col-span-3 row-span-3"
+              className=" vacant p-12 col-span-3 row-span-3"
               id="2"
               onClick={handleClick}
             >
@@ -183,7 +183,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className=" vacant p-16 row-span-3"
+              className=" vacant p-12 row-span-3"
               id="3"
               onClick={handleClick}
             >
@@ -195,7 +195,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-12 col-span-3 row-span-3"
               id="4"
               onClick={handleClick}
             >
@@ -207,7 +207,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className=" vacant p-16 col-span-3 row-span-5"
+              className=" vacant p-12 col-span-3 row-span-5"
               id="5"
               onClick={handleClick}
             >
@@ -219,7 +219,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className=" vacant p-16 col-span-2 row-span-6"
+              className=" vacant p-12 col-span-2 row-span-6"
               id="6"
               onClick={handleClick}
             >
@@ -231,11 +231,11 @@ const Venue = () => {
               }) : ''}</p>
             </div>
 
-            <div className="bg-white p-16 col-span-2 row-span-6"></div>
-            <div className="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-12 col-span-2 row-span-6"></div>
+            <div className="bg-white p-12 col-span-2 row-span-6"></div>
 
             <div
-              className="vacant p-16 col-span-3 row-span-6"
+              className="vacant p-12 col-span-3 row-span-6"
               id="7"
               onClick={handleClick}
             >
@@ -247,7 +247,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-4"
+              className="vacant p-12 col-span-3 row-span-4"
               id="8"
               onClick={handleClick}
             >
@@ -259,11 +259,11 @@ const Venue = () => {
               }) : ''}</p>
             </div>
 
-            <div className=" bg-white p-16 col-span-2 row-span-3">Entrance</div>
-            <div className="bg-white p-16 row-span-3"></div>
+            <div className=" bg-white p-12 col-span-2 row-span-3">Entrance</div>
+            <div className="bg-white p-12 row-span-3"></div>
 
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="9"
               onClick={handleClick}
             >
@@ -275,7 +275,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="10"
               onClick={handleClick}
             >
@@ -287,7 +287,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="11"
               onClick={handleClick}
             >
@@ -299,7 +299,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-12 col-span-3 row-span-3"
               id="12"
               onClick={handleClick}
             >
@@ -319,7 +319,7 @@ const Venue = () => {
         <div className="mt-8 mx-4 mb-2 p-2">
           <div className="grid grid-cols-12 grid-rows-12 gap-4">
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="13"
               onClick={handleClick}
             >
@@ -331,7 +331,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-12 col-span-3 row-span-3"
               id="14"
               onClick={handleClick}
             >
@@ -343,7 +343,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 row-span-3"
+              className="vacant p-12 row-span-3"
               id="15"
               onClick={handleClick}
             >
@@ -355,7 +355,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-12 col-span-3 row-span-3"
               id="16"
               onClick={handleClick}
             >
@@ -367,7 +367,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-5"
+              className="vacant p-12 col-span-3 row-span-5"
               id="17"
               onClick={handleClick}
             >
@@ -379,7 +379,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-2 row-span-6"
+              className="vacant p-12 col-span-2 row-span-6"
               id="18"
               onClick={handleClick}
             >
@@ -390,10 +390,10 @@ const Venue = () => {
                 }
               }) : ''}</p>
             </div>
-            <div className="bg-white p-16 col-span-2 row-span-6"></div>
-            <div className="bg-white p-16 col-span-2 row-span-6"></div>
+            <div className="bg-white p-12 col-span-2 row-span-6"></div>
+            <div className="bg-white p-12 col-span-2 row-span-6"></div>
             <div
-              className="vacant p-16 col-span-3 row-span-6"
+              className="vacant p-12 col-span-3 row-span-6"
               id="19"
               onClick={handleClick}
             >
@@ -405,7 +405,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-4"
+              className="vacant p-12 col-span-3 row-span-4"
               id="20"
               onClick={handleClick}
             >
@@ -416,10 +416,10 @@ const Venue = () => {
                 }
               }) : ''}</p>
             </div>
-            <div className="bg-white p-16 col-span-2 row-span-3">Entrance</div>
-            <div className="bg-white p-16 row-span-3"></div>
+            <div className="bg-white p-12 col-span-2 row-span-3">Entrance</div>
+            <div className="bg-white p-12 row-span-3"></div>
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="21"
               onClick={handleClick}
             >
@@ -431,7 +431,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="22"
               onClick={handleClick}
             >
@@ -443,7 +443,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-2 row-span-3"
+              className="vacant p-12 col-span-2 row-span-3"
               id="23"
               onClick={handleClick}
             >
@@ -455,7 +455,7 @@ const Venue = () => {
               }) : ''}</p>
             </div>
             <div
-              className="vacant p-16 col-span-3 row-span-3"
+              className="vacant p-12 col-span-3 row-span-3"
               id="24"
               onClick={handleClick}
             >
