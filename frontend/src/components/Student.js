@@ -23,7 +23,8 @@ const Student = () => {
       var eventId=1;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handlePopupOpen = () => {
+  const handlePopupOpen = (e) => {
+    setCurrentEvent(e);
     setIsPopupOpen(true);
   };
 
@@ -38,6 +39,7 @@ const Student = () => {
     return navigate('/buy/'+eventId, { state:{ eventId: eventId }});
   };
   const [events, setEvents] = useState([]); 
+  const [currentEvent, setCurrentEvent] = useState({});
   
   const fetchData = async () => {
     try {
@@ -105,23 +107,24 @@ const Student = () => {
         <div key={index} className='h-96 w-80   bg-white rounded-tr-3xl rounded-bl-3xl shadow-blue-500/50' style={{boxShadow:"8px 8px #68bafb "}}>
           <img src={event.image} className='h-64 w-80 rounded-tr-3xl'></img>    
           <p className='text-slate-900 text-3xl mt-2 font-bold'>{event.name}</p>
-          <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'onClick={handlePopupOpen}>View Details</button>
-          {isPopupOpen && (
+          <button className='mt-4 bg-slate-900 text-white px-4 py-2 rounded-full'onClick={() => handlePopupOpen(event)}>View Details</button>
+          
+        </div>
+      ))}
+      {isPopupOpen && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg h-auto w-96 relative">
-            <h2 className='font-bold text-blue-900 text-2xl mb-2'>{event.name}</h2>
-            <h3 className='font-bold text-blue-700 text-xl text-left'>Description: <span className='text-black font-medium text-sm'>{event.desc}</span></h3>
-            <h3 className='font-bold text-blue-700 text-xl text-left'>Date: <span className='text-black font-medium text-sm'>{event.date}</span></h3>
-            <h3 className='font-bold text-blue-700 text-xl text-left'>Time: <span className='text-black font-medium text-sm'>{event.time}</span></h3>
-            <h3 className='font-bold text-blue-700 text-xl text-left'>Location: <span className='text-black font-medium text-sm'>{event.venue}</span></h3>
-            <h3 className='font-bold text-blue-700 text-xl text-left'>Committee: <span className='text-black font-medium text-sm'>{event.committee}</span></h3>
+            <h2 className='font-bold text-blue-900 text-2xl mb-2'>{currentEvent.name}</h2>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Description: <span className='text-black font-medium text-sm'>{currentEvent.desc}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Date: <span className='text-black font-medium text-sm'>{currentEvent.date}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Time: <span className='text-black font-medium text-sm'>{currentEvent.time}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Location: <span className='text-black font-medium text-sm'>{currentEvent.venue}</span></h3>
+            <h3 className='font-bold text-blue-700 text-xl text-left'>Committee: <span className='text-black font-medium text-sm'>{currentEvent.committee}</span></h3>
             <button onClick={handlePopupClose} className='absolute top-0 right-0 p-2'><CloseOutlinedIcon/></button>
-            <button onClick={() => openbuy(event.id)} className='px-4 py-2 text-white bg-slate-900 rounded-full mt-2'>Register</button>
+            <button onClick={() => openbuy(currentEvent.id)} className='px-4 py-2 text-white bg-slate-900 rounded-full mt-2'>Register</button>
           </div>
         </div>
       )}
-        </div>
-      ))}
         </div>
         </div>
 
