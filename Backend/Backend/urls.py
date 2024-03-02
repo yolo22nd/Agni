@@ -58,7 +58,7 @@ path('events/display/delete/<int:pk>/', DispDelEvent.as_view(), name='delete_eve
 
 
     # students registered for event
-    path('committee/regi_students/', RegisteredStudents.as_view({'get': 'list'}), name='view_venues'),
+    path('committee/regi_students/', RegisteredStudents.as_view(), name='view_vregistered_students'),
     #email approval
     path('approve/<str:encoded_data>/', views.email_approval, name='email_approval'),
 

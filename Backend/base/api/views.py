@@ -8,6 +8,8 @@ from base.models import Student, Faculty, Committee
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.middleware.csrf import get_token
+
 
 # from .serializers import MemeSerializer
 
@@ -17,9 +19,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        
+        # csrf_token = get_token(cls)
         # Add standard claims
         token['username'] = user.username
+        token['hashed_password'] = user.password
+        
+
 
         # Add custom claims
         if hasattr(user, 'student'):

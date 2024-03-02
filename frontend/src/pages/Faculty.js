@@ -11,6 +11,7 @@ import axios from 'axios';
 
 function Faculty() {
   const [render, setRender] = useState(false);
+  const [render2, setRender2] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [pendingEvents,setPendingEvents] = useState([]);
@@ -68,10 +69,10 @@ function Faculty() {
         let res = await axios.get('http://127.0.0.1:8000/booking/display/', { headers: { 'Content-Type': 'application/json' } });
         let eventData = await res.data;
         console.log(eventData);
-        setPreviousEvents(eventData.booking_list);
+        setPreviousEvents(eventData);
         if(previousEvents)
         {
-            setRender(true);
+            setRender2(true);
         }
     } catch (error) {
         console.error(error);
@@ -143,8 +144,13 @@ async function approveAll() {
 }
 
 
-  let approve = async(e)=>{
+
+
+
+  async function handleAccept(e) {
+
     console.log("fetching response")
+    console.log(user.fac_id,e.name);
     let response = await axios.post('http://127.0.0.1:8000/approve/', {
         fac_id: user.fac_id,
         event_name: e.name
@@ -157,26 +163,13 @@ async function approveAll() {
     let data = await response.data
     console.log(response)
     console.log(data)
-}
-
-  function handleAccept(e) {
-    // try {
-    //   let pass = prompt("Enter password to proceed");
-    //   if (pass === "Hello") {
-    //     alert("Request Accepted");
-    //   } else {
-    //     alert("Wrong password. Request still pending");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    approve(e)
 
   
   }
 
 async function handleReject(e) {
     try {
+        console.log(user.fac_id,e.name);
         let pass = prompt("Enter password to proceed");
         let response = await axios.post('http://127.0.0.1:8000/reject/', {
             fac_id: user.fac_id,
@@ -297,7 +290,7 @@ async function handleReject(e) {
           <h1>Previous Requests</h1>
         </div>
         <div className="mt-8">
-          {render &&
+          {render2 &&
             previousEvents?.map((e) => {
               return (
                 <div
@@ -339,11 +332,11 @@ async function handleReject(e) {
                         Accepted <DoneIcon />
                       </div>
           }
-          {!e.is_approved &&
+          {/* {!e.is_approved &&
                       <div className="flex items-center ml-5 rounded-xl p-1.5 pl-3 pr-3 text-red-600">
                         Rejected <CloseIcon />
                       </div>
-            }
+            } */}
             {isPopupOpen && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg h-auto w-96 relative">

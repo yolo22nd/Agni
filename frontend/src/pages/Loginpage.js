@@ -89,7 +89,7 @@ const Loginpage = () => {
               htmlFor="email"
               className="block text-left text-sm font-medium leading-6 text-white"
             >
-              Email address
+              Username
             </label>
             <div className="mt-2">
               <input

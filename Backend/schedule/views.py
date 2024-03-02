@@ -70,7 +70,11 @@ def email_send(email, fac_id, event_name, event_data):
 
 from django.core.mail import send_mail
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
+
+@csrf_exempt
+@api_view(['POST'])
 def email_approval(request, encoded_data):
     decoded_bytes = base64.b64decode(encoded_data)
     decoded_str = decoded_bytes.decode('utf-8')
@@ -91,32 +95,34 @@ def email_approval(request, encoded_data):
         if not booking_obj.is_approved_pri:
             booking_obj.is_approved_pri = True
             booking_obj.save()
-            return JsonResponse({'message' : 'Approved by principle'})
+            # return JsonResponse({'message' : 'Approved by principle'})
 
     if faculty_obj.is_hod == True:
         if not booking_obj.is_approved_hod:
             booking_obj.is_approved_hod = True
             booking_obj.save()
-            return JsonResponse({'message' : 'Approved by hod'})
+            # return JsonResponse({'message' : 'Approved by hod'})
 
     if faculty_obj.is_mentor == True:
         if not booking_obj.is_approved_mentor:
             booking_obj.is_approved_mentor = True
             booking_obj.save()
-            return JsonResponse({'message' : 'Approved by mentor'})
+            # return JsonResponse({'message' : 'Approved by mentor'})
         
     if faculty_obj.is_dean == True:
         if not booking_obj.is_approved_dean:
             booking_obj.is_approved_dean = True
             booking_obj.save()
-            return JsonResponse({'message' : 'Approved by dean'})
+            # return JsonResponse({'message' : 'Approved by dean'})
 
+    booking_obj.save()
     # Check if the booking is approved by all four types of faculties
     if booking_obj.is_approved_pri and booking_obj.is_approved_hod and booking_obj.is_approved_mentor and booking_obj.is_approved_dean:
         booking_obj.is_terminated = True
         booking_obj.is_approved_all = True
+
         # Create a new Event object
-        event = Event(name=event_name, booking=booking_obj)
+        event = Event.objects.create(name=event_name,committee=booking_obj.committee,venue=booking_obj.venue,type=booking_obj.type,desc=booking_obj.desc,date=booking_obj.date,time=booking_obj.time,image=booking_obj.image)
         event.save()
 
         # Send an email to the committee
@@ -130,6 +136,8 @@ def email_approval(request, encoded_data):
     return JsonResponse({'message' : 'Event approved successfully'})
 
 
+@csrf_exempt
+@api_view(['POST'])
 def approval(request):
     fac_id = request.data.get('fac_id')
     event_name = request.data.get('event_name')
@@ -174,6 +182,8 @@ def approval(request):
     return JsonResponse({'message' : 'Event approved successfully'})
 
 
+@csrf_exempt
+@api_view(['POST'])
 def rejection(request):
     fac_id = request.data.get('fac_id')
     event_name = request.data.get('event_name')
@@ -252,7 +262,7 @@ class allEvents(APIView):
 
 #Faculty Previous
 class DisplayBookingsPrevious(viewsets.ModelViewSet):
-    queryset = Booking.objects.filter(is_terminated=True)
+    queryset = Booking.objects.filter(is_approved_pri=True,is_approved_dean=True,is_approved_hod=True,is_approved_mentor=True)
     serializer_class = BookingSerializerAll
 
 
@@ -381,9 +391,18 @@ class VenueAvailable(APIView):
         return JsonResponse({"available_venues": serialized_venues,"unavailable_venues":serialized_unavailable_venues})
 
 
-
 class RegisteredStudents(APIView):
-    def get(self, request):
+    def post(self, request):
         event_obj = Event.objects.get(name=request.data.get('name'))
-        registered_students = event_obj.regi_members.split(', ')
-        return Response(registered_students, status=status.HTTP_200_OK)
+        registered_students_ids = event_obj.regi_members.split(', ')
+
+        # Convert the list of ids to integers
+        # registered_students_ids = [int(id) for id in registered_students_ids]
+
+        # Get the Student objects for the registered students
+        registered_students = Student.objects.filter(rollno__in=registered_students_ids)
+
+        # Serialize the Student objects
+        serializer = StudentSerializer(registered_students, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

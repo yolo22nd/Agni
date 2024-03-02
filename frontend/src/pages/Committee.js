@@ -150,9 +150,12 @@ function Committee() {
   };
 
   useEffect(() => {
+    console.log(user)
       getApprovedEventData();
+
       getRejectedEventData();
       getPendingEventData();
+      
   }, []);
 
 
@@ -339,7 +342,7 @@ function Committee() {
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             pendingEventData.map((e) => {
-              if(true){
+              if(!(e.is_approved_pri && e.is_approved_dean && e.is_approved_hod && e.is_approved_mentor)){
               return (
                 <div
                   key={e.id}
@@ -434,7 +437,7 @@ function Committee() {
                       </div>
                     </div>
                       <div>
-                        <button className="text-white bg-blue-900 px-2 py-2 rounded-full mb-2 cursor-pointer hover:bg-blue-800" onClick={() => navigate('/details')}>View details</button>
+                        <button className="text-white bg-blue-900 px-2 py-2 rounded-full mb-2 cursor-pointer hover:bg-blue-800" onClick={() => navigate('/details',{ state: { name:e.name } })}>View details</button>
                       </div>
                   </div>
                 </div>
