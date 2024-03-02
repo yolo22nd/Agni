@@ -79,7 +79,7 @@ function Faculty() {
   };
 
   useEffect(() => {
-    setRender(true);
+    // setRender(true);
     getPendingEvents();
     getPreviousEvents();
   }, []);
@@ -298,7 +298,7 @@ async function handleReject(e) {
         </div>
         <div className="mt-8">
           {render &&
-            previousEvents.map((e) => {
+            previousEvents?.map((e) => {
               return (
                 <div
                   key={e.name}

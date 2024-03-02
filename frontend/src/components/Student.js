@@ -9,6 +9,7 @@ import { useState,useEffect,Link } from "react";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Student = () => {
     var settings = {
@@ -44,19 +45,19 @@ const Student = () => {
   
   const fetchData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/events/display/student/');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setEvents(data);
-      if(events){
-        setRender(true)
-      }
+      let response = await axios.post('http://127.0.0.1:8000/events/all/', { headers: { 'Content-Type': 'application/json' } });
+      console.log(response.data)
+        // const response = await axios.post('http://127.0.0.1:8000/events/display/student/');
+        const data = response.data;
+        setEvents(data);
+        if(events){
+            setRender(true)
+        }
     } catch (error) {
-      console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     }
-  };
+};
+
   useEffect(() => {
     fetchData(); 
   }, []);

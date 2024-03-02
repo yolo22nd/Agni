@@ -9,6 +9,7 @@ urlpatterns = [
 
     #create event
     path('events/', createEvent.as_view(), name='create_event'),
+    path('events/all/', allEvents.as_view(), name='all_events'),
 
     #send email
     path('events/approval/<str:event>/<str:fac_id>/', email_approval, name='create_event'),
@@ -25,7 +26,7 @@ path('events/display/delete/<int:pk>/', DispDelEvent.as_view(), name='delete_eve
     path('events/display/student/rejected/', DisplayEventStudentRejected.as_view(), name='view_rejected_events'),
     path('events/display/student/', DisplayEventStudentApproved.as_view(), name='view_approved_events'),
     path('events/display/student/<int:pk>/', DisplayEventStudentApproved.as_view(), name='view_approved_eventdeets'),
-    path('booking/display/pending', DisplayEventStudentPending.as_view(), name='view_bookings'),
+    path('booking/display/pending/', DisplayEventStudentPending.as_view(), name='view_bookings'),
     
 
     #faculty page

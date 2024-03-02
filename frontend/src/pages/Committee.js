@@ -105,9 +105,14 @@ function Committee() {
   
   const getApprovedEventData = async () => {
     try {
-        let res = await axios.get('http://127.0.0.1:8000/events/display/student/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+      console.log(user.name)
+        let res = await axios.post('http://127.0.0.1:8000/events/display/student/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
         let eventData = await res.data;
         setApprovedEventData(eventData);
+        if(approvedEventData)
+        {
+            setRender(true);
+        }
     } catch (error) {
         console.error(error);
     }
@@ -115,9 +120,13 @@ function Committee() {
 
   const getRejectedEventData = async () => {
       try {
-          let res = await axios.get('http://127.0.0.1:8000/events/display/student/rejected/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+          let res = await axios.post('http://127.0.0.1:8000/events/display/student/rejected/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
           let eventData = await res.data;
           setRejectedEventData(eventData);
+          if(rejectedEventData)
+          {
+              setRender(true);
+          }
       } catch (error) {
           console.error(error);
       }
@@ -125,9 +134,16 @@ function Committee() {
 
   const getPendingEventData = async () => {
       try {
-          let res = await axios.get('http://127.0.0.1:8000/booking/display/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+          let res = await axios.post('http://127.0.0.1:8000/booking/display/pending/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
           let eventData = await res.data;
+          console.log(res.data)
+
           setPendingEventData(eventData);
+          if(pendingEventData)
+          {
+              setRender(true);
+          }
+          console.log(pendingEventData)
       } catch (error) {
           console.error(error);
       }
@@ -323,7 +339,7 @@ function Committee() {
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             pendingEventData.map((e) => {
-              if(e.is_approved === false && e.is_rejected === false){
+              if(true){
               return (
                 <div
                   key={e.id}
@@ -376,7 +392,7 @@ function Committee() {
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
             approvedEventData.map((e) => {
-              if(e.is_approved === true && e.is_rejected === false){
+              if(true){
               return (
                 <div
                   key={e.id}
@@ -433,7 +449,7 @@ function Committee() {
           {render &&
             rejectedEventData.map((e) => {
               console.log(e.name)
-              if(e.is_approved === false && e.is_rejected === true){
+              if(true){
                 console.log(e.name)
               return (
                 <div

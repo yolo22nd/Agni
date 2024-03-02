@@ -219,7 +219,7 @@ def rejection(request):
 
 #Committee Approved
 class DisplayEventStudentApproved(APIView):
-    def get(self, request):
+    def post(self, request):
         committee_obj = Committee.objects.get(name=request.data.get('name'))
         events = Event.objects.filter(committee=committee_obj.name)
         serialized_events = EventSerializerAll(events, many=True)
@@ -227,7 +227,7 @@ class DisplayEventStudentApproved(APIView):
 
 #Committee Rejected
 class DisplayEventStudentRejected(APIView):
-    def get(self, request):
+    def post(self, request):
         committee_obj = Committee.objects.get(name=request.data.get('name'))
         events = Booking.objects.filter(committee=committee_obj.name, is_approved_all=False, is_terminated=True)
         serialized_events = BookingSerializerAll(events, many=True)
@@ -235,9 +235,16 @@ class DisplayEventStudentRejected(APIView):
 
 #Committee Pending
 class DisplayEventStudentPending(APIView):
-    def get(self, request):
+    def post(self, request):
         committee_obj = Committee.objects.get(name=request.data.get('name'))
         events = Booking.objects.filter(committee=committee_obj.name, is_terminated=False)
+        serialized_events = BookingSerializerAll(events, many=True)
+        return Response(serialized_events.data, status=status.HTTP_200_OK)
+    
+#all events
+class allEvents(APIView):
+    def post(self, request):
+        events = Event.objects.all()
         serialized_events = BookingSerializerAll(events, many=True)
         return Response(serialized_events.data, status=status.HTTP_200_OK)
     
