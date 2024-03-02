@@ -1,23 +1,37 @@
 import {React,useState,useContext} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import axios from 'axios';
 
 const Form = () => {
     const [pass, setPass] = useState("");
-
     const handleChange = (e) => {
       e.preventDefault();
       setPass(e.target.value);
     };
     const navigate = useNavigate();
+    const { encoded_data } = useParams(); // Fetch the encoded data from the URL
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log(pass)
-      navigate('/faculty');
+        try {
+            let response = await axios.post(`http://127.0.0.1:8000/approve/${encoded_data}/`, { // Pass the encoded data in the URL
+                password: pass // Pass the password in the request body
+            }, {
+                headers:{
+                    'Content-Type':'application/json',
+                }
+            });
+            if (response.status === 200) {
+                alert("Request Approved");
+                window.close();
+            } else {
+                alert("Wrong password. Request still pending");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
-
-    const { user } = useContext(AuthContext);
-
   return (
     <div className="w-full bg-gradient-to-br from-cyan-800 to-indigo-950 h-screen p-32 flex items-center justify-center flex-col">
                 <label
@@ -27,7 +41,7 @@ const Form = () => {
                     Enter password:
                 </label>
                 <input
-                    type="text"
+                    type="password"
                     id="pass"
                     required
                     onChange={handleChange}
@@ -35,10 +49,8 @@ const Form = () => {
                 />
                 <div>
                 <button type='submit' className='px-6 py-2 mt-4 text-white rounded-full cursor-pointer mt-2 w-lg bg-red-700 mr-4 hover:bg-red-600' onClick={handleSubmit}>Accept</button>
-                <button type='submit' className='px-6 py-2 mt-4 text-white rounded-full cursor-pointer mt-2 w-lg bg-green-600 hover:bg-green-500' onClick={handleSubmit}>Reject</button>
                 </div>
     </div>
   )
 }
-
 export default Form

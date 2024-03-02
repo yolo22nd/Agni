@@ -39,7 +39,7 @@ class Booking(models.Model):
     time =  models.TimeField(blank=False, null=False)
     committee = models.ForeignKey('base.Committee', on_delete=models.CASCADE, blank=False, null=False)
     venue = models.ForeignKey('Venue', on_delete=models.CASCADE, blank=False, null=False)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE, null=False, blank=False)
+    image = models.CharField(max_length=1000,null=True)
     is_terminated = models.BooleanField(default = False)
     is_approved_all = models.BooleanField(default=False)
     is_approved_pri = models.BooleanField(default=False)
@@ -48,30 +48,30 @@ class Booking(models.Model):
     is_approved_hod = models.BooleanField(default=False)
 
 
-    def save(self, *args, **kwargs):
-            if self.is_approved_pri and self.is_approved_hod and self.is_approved_mentor and self.is_approved_dean:
-                self.is_approved_all = True
-                self.event.is_approved = True
-                self.event.save()
-                self.venue.is_available = False
-                self.venue.save()
-            else:
-                self.is_approved_all = False
-                self.event.is_approved = False
-                self.event.save()
-                self.venue.is_available = True
-                self.venue.save()
-            venue = self.venue
-            venue.is_available = True
-            end_time = timezone.datetime.combine(self.date, self.time) + timedelta(hours=24)
-            end_time = timezone.make_aware(end_time, timezone.get_current_timezone())
-            now = timezone.now()
-            if now < end_time:
-                venue.is_available = False
-            else:
-                venue.is_available = True
-            venue.save()
-            super().save(*args,**kwargs)
+    # def save(self, *args, **kwargs):
+    #         if self.is_approved_pri and self.is_approved_hod and self.is_approved_mentor and self.is_approved_dean:
+    #             self.is_approved_all = True
+    #             self.event.is_approved = True
+    #             self.event.save()
+    #             self.venue.is_available = False
+    #             self.venue.save()
+    #         else:
+    #             self.is_approved_all = False
+    #             self.event.is_approved = False
+    #             self.event.save()
+    #             self.venue.is_available = True
+    #             self.venue.save()
+    #         venue = self.venue
+    #         venue.is_available = True
+    #         end_time = timezone.datetime.combine(self.date, self.time) + timedelta(hours=24)
+    #         end_time = timezone.make_aware(end_time, timezone.get_current_timezone())
+    #         now = timezone.now()
+    #         if now < end_time:
+    #             venue.is_available = False
+    #         else:
+    #             venue.is_available = True
+    #         venue.save()
+    #         super().save(*args,**kwargs)
 
 
 class Event(models.Model):

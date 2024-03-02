@@ -6,108 +6,159 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import axios from 'axios';
+
 
 function Faculty() {
   const [render, setRender] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [pendingevents,setPendingEvents] = useState([]);
-  const [events,setEvents] = useState([]);
+  const [pendingEvents,setPendingEvents] = useState([]);
+  const [previousEvents,setPreviousEvents] = useState([]);
   const {user} = useContext(AuthContext)
+  
+
+//   let getPendingEvents = async()=>{
+//     let fac_id=user.fac_id
+//     console.log("fetching response")
+//     let response = await fetch('http://127.0.0.1:8000/events/display/student/pending/', {
+//           method:'POST',
+//           headers:{
+//             'Content-Type':'application/json',
+//             // 'Authorization':'Bearer '+String(authTokens.access),
+//           },
+//           body:JSON.stringify({fac_id})     
+//     })  
+//         console.log("response fetched")
+//     let data = await response.json()
+//     console.log("data set")
+//     console.log(data)
+//     if (response.status === 200) {
+//       setPendingEvents(data.event_list);
+//       console.log('events set')
+//   }
+  
+// }
+
+
+
+  const handlePopup = (e) => {
+      setCurrentEvent(e);
+      setIsPopupOpen(true);
+  };
+
+  const getPendingEvents = async () => {
+    try {
+        let res = await axios.post('http://127.0.0.1:8000/events/display/student/pending/', { fac_id: user.fac_id }, { headers: { 'Content-Type': 'application/json' } });
+        let eventData = await res.data;
+        console.log(eventData.booking_list);
+        setPendingEvents(eventData.booking_list);  // Set pendingEvents to eventData.booking_list
+        if(pendingEvents)
+        {
+            setRender(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    
+    const getPreviousEvents = async () => {
+      try {
+        let res = await axios.get('http://127.0.0.1:8000/booking/display/', { headers: { 'Content-Type': 'application/json' } });
+        let eventData = await res.data;
+        console.log(eventData);
+        setPreviousEvents(eventData.booking_list);
+        if(previousEvents)
+        {
+            setRender(true);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+  };
 
   useEffect(() => {
     setRender(true);
-    getPendingEvents()
-    getEvents()
+    getPendingEvents();
+    getPreviousEvents();
   }, []);
 
 
-  let getPendingEvents = async()=>{
-    let fac_id=user.fac_id
-    console.log("fetching response")
-    let response = await fetch('http://127.0.0.1:8000/events/display/student/pending/', {
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            // 'Authorization':'Bearer '+String(authTokens.access),
-          },
-          body:JSON.stringify({fac_id})     
-    })  
-        console.log("response fetched")
-    let data = await response.json()
-    console.log("data set")
-    console.log(data)
-    if (response.status === 200) {
-      setPendingEvents(data.event_list);
-      console.log('events set')
-  }
-  
-}
 
-  let getEvents = async()=>{
-    console.log("fetching response")
-    let response = await fetch('http://127.0.0.1:8000/events/display/student/previous/', {
-          method:'GET',
-          headers:{
-            'Content-Type':'application/json',
-            // 'Authorization':'Bearer '+String(authTokens.access),
-          }
-    })
-        console.log("response fetched")
-    let data = await response.json()
-    console.log("data set")
-    console.log(data)
-    if (response.status === 200) {
-      setEvents(data);
-      console.log('events set')
-  } 
-  // else if (response.statusText === 'Unauthorized'){
-  //   logOutUser()
-  // }  
-}
+//   let getEvents = async()=>{
+//     console.log("fetching response")
+//     let response = await fetch('http://127.0.0.1:8000/events/display/student/previous/', {
+//           method:'GET',
+//           headers:{
+//             'Content-Type':'application/json',
+//             // 'Authorization':'Bearer '+String(authTokens.access),
+//           }
+//     })
+//         console.log("response fetched")
+//     let data = await response.json()
+//     console.log("data set")
+//     console.log(data)
+//     if (response.status === 200) {
+//       setEvents(data);
+//       console.log('events set')
+//   } 
+//   // else if (response.statusText === 'Unauthorized'){
+//   //   logOutUser()
+//   // }  
+// }
 
 
-  function approveAll() {
-    let a = document.getElementById("approveAll").checked;
-    if (a) {
+async function approveAll() {
+  let a = document.getElementById("approveAll").checked;
+  if (a) {
       let b = window.confirm(
-        "Are you sure you want to approve all the pending requests?"
+          "Are you sure you want to approve all the pending requests?"
       );
       if (b === true) {
-        let pass = prompt("Enter password to proceed");
-        if (pass === "Hello") {
           try {
-            pendingevents.map((ev) => {
-                alert("All requests accepted")
-            });
+              for (let ev of pendingEvents) {
+                  let response = await axios.post('http://127.0.0.1:8000/approve/', {
+                      fac_id: user.fac_id,
+                      event_name: ev.name
+                  }, {
+                      headers:{
+                          'Content-Type':'application/json',
+                      }
+                  });
+                  console.log("response fetched")
+                  let data = await response.data
+                  console.log(response)
+                  console.log(data)
+              }
+              alert("All requests accepted")
           } catch (e) {
-            console.log(e);
+              console.log(e);
           }
-        } else {
-          alert("Wrong password. Request still pending");
-          document.getElementById("approveAll").checked = false;
-        }
       }
       else{
-        document.getElementById("approveAll").checked = false;
+          document.getElementById("approveAll").checked = false;
       }
-    }
   }
+}
+
+
   let approve = async(e)=>{
     console.log("fetching response")
-    let response = await fetch('http://127.0.0.1:8000/events/approval/'+e.name+'/'+user.fac_id+'/', {
-          method:'GET',
-          headers:{
+    let response = await axios.post('http://127.0.0.1:8000/approve/', {
+        fac_id: user.fac_id,
+        event_name: e.name
+    }, {
+        headers:{
             'Content-Type':'application/json',
-            // 'Authorization':'Bearer '+String(authTokens.access),
-          }
+        }
     })
-        console.log("response fetched")
-    let data = await response.json()
+    console.log("response fetched")
+    let data = await response.data
     console.log(response)
     console.log(data)
-    
 }
+
   function handleAccept(e) {
     // try {
     //   let pass = prompt("Enter password to proceed");
@@ -123,23 +174,29 @@ function Faculty() {
 
   
   }
-  function handleReject(e) {
-    try {
-      let pass = prompt("Enter password to proceed");
-      if (pass === "Hello") {
-        alert("Request Rejeted");
-      } else {
-        alert("Wrong password. Request still pending");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
-  let handlePopup = (e) => {
-    setCurrentEvent(e);
-    setIsPopupOpen(true);
-  }
+async function handleReject(e) {
+    try {
+        let pass = prompt("Enter password to proceed");
+        let response = await axios.post('http://127.0.0.1:8000/reject/', {
+            fac_id: user.fac_id,
+            event_name: e.name,
+            password: pass
+        }, {
+            headers:{
+                'Content-Type':'application/json',
+            }
+        });
+        if (response.status === 200) {
+            alert("Request Rejected");
+        } else {
+            alert("Wrong password. Request still pending");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
   // let events = [
   //   {
@@ -181,7 +238,7 @@ function Faculty() {
             </label>
           </div>
           {render &&
-            pendingevents.map((e) => {
+            pendingEvents.map((e) => {
               return (
                 <div
                   key={e.name}
@@ -241,7 +298,7 @@ function Faculty() {
         </div>
         <div className="mt-8">
           {render &&
-            events.map((e) => {
+            previousEvents.map((e) => {
               return (
                 <div
                   key={e.name}

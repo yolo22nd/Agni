@@ -53,7 +53,11 @@ const Venue = () => {
   const getEventData = async () => {
     try {
       setCommitteeEventData([])
-      let res = await axios.get('http://127.0.0.1:8000/events/display/', { headers: { 'Content-Type': 'application/json' } });
+      let res = await axios.post('http://127.0.0.1:8000/events/display/', { 
+        date: state.date // Add the date to the body of the request
+      }, { 
+        headers: { 'Content-Type': 'application/json' } 
+      });
       let eventData = await res.data;
       console.log(eventData); // Check the retrieved data
       let dummyData = [];
@@ -68,6 +72,7 @@ const Venue = () => {
       console.error(error);
     }
   };
+
 
   useEffect(() => {
     getVacancy();
@@ -91,10 +96,10 @@ const Venue = () => {
         {
           name: state.name,
           type: state.type,
-          date: state.date,
-          time: state.time,
           desc: state.desc,
+          date: state.date,
           image: state.image,
+          time: state.time,
           committee: state.committee,
           venue: vacantSeat,
         },

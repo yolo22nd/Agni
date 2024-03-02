@@ -16,9 +16,15 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
-        fields = ['name', 'type', 'date', 'time', 'desc', 'image']
-        # fields = '__all__'
+        model = Booking
+        # fields = ['name', 'type', 'date', 'time', 'desc', 'image', 'committee', 'venue']
+        fields = '__all__'
+
+    # def save(self, **kwargs):
+    #     instance = super().save(**kwargs)
+    #     # Your custom logic here...
+    #     return instance  # Make sure to return the instance
+
 
 class EventSerializerAll(serializers.ModelSerializer):
     class Meta:
@@ -27,7 +33,7 @@ class EventSerializerAll(serializers.ModelSerializer):
 
 class BookingSerializerAll(serializers.ModelSerializer):
     class Meta:
-        model = Event
+        model = Booking
         fields = '__all__'
 
 class VenueSerializer(serializers.ModelSerializer):

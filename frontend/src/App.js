@@ -30,18 +30,20 @@ function App() {
             <Routes>
               <Route element={<StudentRoutes/>}>
                 <Route path='/student' element={<Student/>}/>
+                <Route exact path='/pay' element={<DisplayRazorPay/>}/>
+                <Route path="/buy/:id"  element={<Buy/>}/>
               </Route>
 
               <Route element={<CommitteeRoutes/>}>
-              <Route path="/create/:id"  element={<Createpage/>}/>
-              <Route path='/committee' element={<Committee/>}/>
-              <Route path='/venue' element={<Venue/>}/></Route>
+                <Route path="/create/:id"  element={<Createpage/>}/>
+                <Route path='/committee' element={<Committee/>}/>
+                <Route path='/venue' element={<Venue/>}/>
+                <Route path="/details"  element={<DetailsPage/>}/>
+              </Route>
               <Route element={<FacultyRoutes/>}>
-              <Route path='/Faculty' element={<Faculty/>}/></Route>
-              <Route exact path='/pay' element={<DisplayRazorPay/>}/>
-              <Route path="/buy/:id"  element={<Buy/>}/>
-              <Route path="/form"  element={<Form/>}/>
-              <Route path="/details"  element={<DetailsPage/>}/>
+                <Route path='/Faculty' element={<Faculty/>}/>
+              </Route>
+              <Route path="/form/:encoded_data"  element={<Form/>}/>
                 {/* <Route exact path='/' element={<Homepage/>}/>
                 <Route exact path='/memes' element={<Memepage/>}/>
                 <Route exact path='/saved' element={<Userpage/>}/> */}

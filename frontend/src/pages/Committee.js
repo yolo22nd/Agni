@@ -77,12 +77,15 @@ function Committee() {
   }
 
   let [committeeEventData, setCommitteeEventData] = useState([]);
+  let [pendingEventData, setPendingEventData] = useState([]);
+  let [approvedEventData, setApprovedEventData] = useState([]);
+  let [rejectedEventData, setRejectedEventData] = useState([]);
 
 
   const getEventData = async () => {
     try {
       setCommitteeEventData([])
-      let res = await axios.get('http://127.0.0.1:8000/events/display/', { headers: { 'Content-Type': 'application/json' } });
+      let res = await axios.post('http://127.0.0.1:8000/events/display/', { headers: { 'Content-Type': 'application/json' } });
       let eventData = await res.data;
       console.log(eventData); // Check the retrieved data
       let dummyData = [];
@@ -99,11 +102,44 @@ function Committee() {
       console.error(error);
     }
   };
+  
+  const getApprovedEventData = async () => {
+    try {
+        let res = await axios.get('http://127.0.0.1:8000/events/display/student/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+        let eventData = await res.data;
+        setApprovedEventData(eventData);
+    } catch (error) {
+        console.error(error);
+    }
+  };
+
+  const getRejectedEventData = async () => {
+      try {
+          let res = await axios.get('http://127.0.0.1:8000/events/display/student/rejected/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+          let eventData = await res.data;
+          setRejectedEventData(eventData);
+      } catch (error) {
+          console.error(error);
+      }
+  };
+
+  const getPendingEventData = async () => {
+      try {
+          let res = await axios.get('http://127.0.0.1:8000/booking/display/', { name: user.name }, { headers: { 'Content-Type': 'application/json' } });
+          let eventData = await res.data;
+          setPendingEventData(eventData);
+      } catch (error) {
+          console.error(error);
+      }
+  };
 
   useEffect(() => {
-    getEventData();
+      getApprovedEventData();
+      getRejectedEventData();
+      getPendingEventData();
   }, []);
-  
+
+
   return (
     <div className="h-max">
       <Header />
@@ -286,7 +322,7 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            committeeEventData.map((e) => {
+            pendingEventData.map((e) => {
               if(e.is_approved === false && e.is_rejected === false){
               return (
                 <div
@@ -339,7 +375,7 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            committeeEventData.map((e) => {
+            approvedEventData.map((e) => {
               if(e.is_approved === true && e.is_rejected === false){
               return (
                 <div
@@ -395,7 +431,7 @@ function Committee() {
         </div>
         <div className="max-w-[1300px] m-auto pt-10 flex flex-wrap justify-around">
           {render &&
-            committeeEventData.map((e) => {
+            rejectedEventData.map((e) => {
               console.log(e.name)
               if(e.is_approved === false && e.is_rejected === true){
                 console.log(e.name)

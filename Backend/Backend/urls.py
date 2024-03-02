@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path,include
 from schedule.views import *
+from schedule import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,19 +17,23 @@ urlpatterns = [
 
 
     #view all events
-    path('events/display/', DisplayEvent.as_view({'get': 'list'}), name='view_events'),
-    path('events/display/<int:pk>/', DisplayEvent.as_view({'get': 'retrieve'}), name='view_eventdeets'),
-    path('events/display/<int:pk>/', DispDelEvent.as_view({'delete': 'delete'}), name='view_eventdeets'),
+path('events/display/', DisplayEvent.as_view(), name='view_events'),
+path('events/display/details/<int:pk>/', DisplayEventDetails.as_view(), name='view_eventdeets'),
+path('events/display/delete/<int:pk>/', DispDelEvent.as_view(), name='delete_event'),
 
-    #view approved events
-    path('events/display/student/', DisplayEventStudentApproved.as_view({'get': 'list'}), name='view_approved_events'),
-    path('events/display/student/rejected/', DisplayEventStudentRejected.as_view({'get': 'list'}), name='view_rejected_events'),
-    path('events/display/student/pending/', DisplayEventStudentPending.as_view({'post': 'list'}), name='view_pending_events'),
-    path('events/display/student/previous/', DisplayEventStudentPrevious.as_view({'get': 'list'}), name='view_previous_events'),
-    path('events/display/student/<int:pk>/', DisplayEventStudentApproved.as_view({'get': 'retrieve'}), name='view_approved_eventdeets'),
+    #committee page
+    path('events/display/student/rejected/', DisplayEventStudentRejected.as_view(), name='view_rejected_events'),
+    path('events/display/student/', DisplayEventStudentApproved.as_view(), name='view_approved_events'),
+    path('events/display/student/<int:pk>/', DisplayEventStudentApproved.as_view(), name='view_approved_eventdeets'),
+    path('booking/display/pending', DisplayEventStudentPending.as_view(), name='view_bookings'),
+    
+
+    #faculty page
+    path('events/display/student/pending/', DisplayEventStudentPendingFac.as_view({'post': 'list'}), name='view_pending_events'),
+    path('booking/display/', DisplayBookingsPrevious.as_view({'get' : 'list'}), name='view_bookings'),
+    # path('events/display/student/previous/', DisplayEventStudentPrevious.as_view({'get': 'list'}), name='view_previous_events'),
 
     #view pending bookings all
-    path('booking/display/', DisplayBookingsPrevious.as_view({'get' : 'list'}), name='view_bookings'),
 
 
     #view committees
@@ -53,5 +58,11 @@ urlpatterns = [
 
     # students registered for event
     path('venue/display/', DisplayVenue.as_view({'get': 'list'}), name='view_venues'),
+    #email approval
+    path('approve/<str:encoded_data>/', views.email_approval, name='email_approval'),
+
+    #faculty approval and rejection
+    path('approve/', views.approval, name='approval'),
+    path('reject/', views.rejection, name='rejection'),
 ]
 

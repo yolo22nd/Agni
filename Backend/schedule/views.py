@@ -16,42 +16,28 @@ from django.db.models import Q
 from schedule.serializers import *
 from base.models import *
 from base.serializers import *
+from base.api.views import *
+from django.contrib.auth.hashers import check_password
+
 
 # Create your views here.
 
 
 class createEvent(APIView):
     def post(self, request):
-        # data = request.data.copy()
-        # data['user'] = user.id  # Add the user id to the data
-
-        # data["committee"]=Committee.objects.filter(name=request.data["committee_name"])
-        # del data["committee_name"]
-        # data["venue"]=Venue.objects.filter(name=request.data["venue_name"])
-        # del data["venue_name"]
         serializer = BookingSerializer(data=request.data)
         event_name = request.data.get('name')
-        # booking_data = {
-        #     'date' : request.data.get('date'),
-        #     'time' : request.data.get('time'),
-        #     'committee' : request.data.get('committee'),
-        #     'venue' : request.data.get('venue'),
-        #     'event' : 
-        # }
 
         if serializer.is_valid():
             try:
-                serializer.save()
-                # event_obj=Event.objects.get(name=event_name)
-                # booking_obj, created = Booking.objects.get_or_create(event=event_obj,venue= event_obj.venue, date=event_obj.date, time=event_obj.time,committee=event_obj.committee)
-                # booking_obj.is_approved_all=False
-                # booking_obj.save()
+                print("serializer valid")
+                booking_obj = serializer.save()
+                print(booking_obj)
 
                 principle = Faculty.objects.get(is_principle=True)
                 hod = Faculty.objects.get(is_hod=True)
                 mentor = Faculty.objects.get(is_mentor=True)
                 dean = Faculty.objects.get(is_dean=True)
-                print(principle, hod, mentor, dean)
                 
                 email_send(principle.email, principle.fac_id, event_name, request.data)
                 email_send(hod.email, hod.fac_id, event_name, request.data)
@@ -72,34 +58,41 @@ def encrypt_name(name):
     return encoded_name
 
 
-def email_send(email, name, event_name, event_data):
+def email_send(email, fac_id, event_name, event_data):
     subject = 'click the link to approve the event'
     # message = f'{event_data}\nClick on the link to approve this event http://127.0.0.1:8000/events/approval/{event_name}/{fac_id}/'
-    encoded_name = encrypt_name(name)
-    message = f'{event_data}\nClick on the link to approve this event http://localhost:3000/form/{encoded_name}'
+    encoded_data = encrypt_name(fac_id+"+"+event_name)
+    message = f'{event_data}\nClick on the link to approve this event http://localhost:3000/form/{encoded_data}'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email]
     send_mail(subject, message, email_from,recipient_list)
 
 
-# Verifying the email
-def email_approval(request, event, fac_id):
+from django.core.mail import send_mail
+from django.conf import settings
+
+def email_approval(request, encoded_data):
+    decoded_bytes = base64.b64decode(encoded_data)
+    decoded_str = decoded_bytes.decode('utf-8')
+    fac_id, event_name = decoded_str.split('+')
+
     faculty_obj = get_object_or_404(Faculty, fac_id=fac_id)
-    booking_obj = Event.objects.get(name=event)
-    # booking = Booking.objects.get(event=event_obj)
-    # booking, created = Booking.objects.get_or_create(
-    #     date=event_obj.date, 
-    #     time=event_obj.time,
-    #     venue=event_obj.venue,  
-    #     committee=event_obj.committee, 
-    #     event=event_obj)
+    
+    # Get the password from the request
+    password = request.data.get('password')
+
+    # Verify the password
+    if not check_password(password, faculty_obj.user.password):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    booking_obj = Booking.objects.get(name=event_name)
 
     if faculty_obj.is_principle == True:
         if not booking_obj.is_approved_pri:
             booking_obj.is_approved_pri = True
             booking_obj.save()
             return JsonResponse({'message' : 'Approved by principle'})
-    
+
     if faculty_obj.is_hod == True:
         if not booking_obj.is_approved_hod:
             booking_obj.is_approved_hod = True
@@ -117,22 +110,102 @@ def email_approval(request, event, fac_id):
             booking_obj.is_approved_dean = True
             booking_obj.save()
             return JsonResponse({'message' : 'Approved by dean'})
-    
-    # if not faculty_obj.is_verified:
-    #     user_obj.is_verified = True
-    #     user_obj.save()
-    #     print(user_obj)
-    #     return JsonResponse({'message' : 'verified'})
+
+    # Check if the booking is approved by all four types of faculties
+    if booking_obj.is_approved_pri and booking_obj.is_approved_hod and booking_obj.is_approved_mentor and booking_obj.is_approved_dean:
+        booking_obj.is_terminated = True
+        booking_obj.is_approved_all = True
+        # Create a new Event object
+        event = Event(name=event_name, booking=booking_obj)
+        event.save()
+
+        # Send an email to the committee
+        committee = Committee.objects.get(user=booking_obj.user)
+        subject = 'Your event has been approved'
+        message = f'Your event "{event_name}" has been approved by all the faculties and it is successfully scheduled. \n All the students can start with the registrations now.'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [committee.email]
+        send_mail(subject, message, email_from, recipient_list)
+
+    return JsonResponse({'message' : 'Event approved successfully'})
+
+
+def approval(request):
+    fac_id = request.data.get('fac_id')
+    event_name = request.data.get('event_name')
+
+    faculty_obj = get_object_or_404(Faculty, fac_id=fac_id)
+    booking_obj = Booking.objects.get(name=event_name)
+
+    if faculty_obj.is_principle == True:
+        if not booking_obj.is_approved_pri:
+            booking_obj.is_approved_pri = True
+
+    if faculty_obj.is_hod == True:
+        if not booking_obj.is_approved_hod:
+            booking_obj.is_approved_hod = True
+
+    if faculty_obj.is_mentor == True:
+        if not booking_obj.is_approved_mentor:
+            booking_obj.is_approved_mentor = True
         
+    if faculty_obj.is_dean == True:
+        if not booking_obj.is_approved_dean:
+            booking_obj.is_approved_dean = True
 
-        #add condition for all approve and set it true
-    return JsonResponse({'message' : 'Event is already approved'})
+    # Check if the booking is approved by all four types of faculties
+    if booking_obj.is_approved_pri and booking_obj.is_approved_hod and booking_obj.is_approved_mentor and booking_obj.is_approved_dean:
+        booking_obj.is_terminated = True
+        booking_obj.is_approved_all = True
+        booking_obj.save()
 
+        # Create a new Event object
+        event = Event(name=event_name, booking=booking_obj)
+        event.save()
+
+        # Send an email to the committee
+        committee = Committee.objects.get(user=booking_obj.user)
+        subject = 'Your event has been approved'
+        message = f'Your event "{event_name}" has been approved by all the faculties and it is successfully scheduled. \n All the students can start with the registrations now.'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [committee.email]
+        send_mail(subject, message, email_from, recipient_list)
+
+    return JsonResponse({'message' : 'Event approved successfully'})
+
+
+def rejection(request):
+    fac_id = request.data.get('fac_id')
+    event_name = request.data.get('event_name')
+    password = request.data.get('password')
+
+    faculty_obj = get_object_or_404(Faculty, fac_id=fac_id)
+
+    # Verify the password
+    if not check_password(password, faculty_obj.user.password):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    booking_obj = Booking.objects.get(name=event_name)
+
+    # Set isTerminated to True and is_approved_all to False
+    booking_obj.is_terminated = True
+    booking_obj.is_approved_all = False
+    booking_obj.save()
+
+    # Send an email to the committee
+    committee = Committee.objects.get(user=booking_obj.user)
+    subject = 'Your event has been cancelled'
+    message = f'Unfortunately, your event "{event_name}" has been cancelled. You may take it up with your respective faculties.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [committee.email]
+    send_mail(subject, message, email_from, recipient_list)
+
+    return JsonResponse({'message' : 'Event cancelled successfully'})
 
 
 
 # class DisplayEventStudentApproved(viewsets.ModelViewSet):
-#     queryset = Booking.objects.filter(is_terminated=True)
+#     queryset = Booking.objects.filter(is_terminated=True, is_approved_all=True)
 #     serializer_class = BookingSerializerAll
 
 # class DisplayEventStudentRejected(viewsets.ModelViewSet):
@@ -160,7 +233,7 @@ class DisplayEventStudentRejected(APIView):
         serialized_events = BookingSerializerAll(events, many=True)
         return Response(serialized_events.data, status=status.HTTP_200_OK)
 
-#Committee Previous
+#Committee Pending
 class DisplayEventStudentPending(APIView):
     def get(self, request):
         committee_obj = Committee.objects.get(name=request.data.get('name'))
@@ -177,61 +250,64 @@ class DisplayBookingsPrevious(viewsets.ModelViewSet):
 
 
 # Faculty Pending
-class DisplayEventStudentPending(viewsets.ViewSet):
-    serializer_class = EventSerializerAll
+class DisplayEventStudentPendingFac(viewsets.ViewSet):
+    serializer_class = BookingSerializer  # Change this to your Booking serializer
 
     def list(self, request):
         fac_id = request.data.get('fac_id')
-        # event_id = request.data.get('event_id')
 
         try:
             faculty_obj = Faculty.objects.get(fac_id=fac_id)
-            # event_obj = Event.objects.get(id=event_id)
-            # venue_obj = event_obj.venue
-            # booking_obj, created = Booking.objects.get_or_create(event=event_obj,venue= venue_obj, date=event_obj.date, time=event_obj.time,committee=event_obj.committee)
-            # if created:
-            #     booking_obj.save()
 
-            event_list = []
+            booking_list = []
 
             if faculty_obj.is_principle:
-                booking_queryset = Booking.objects.filter(is_approved_pri=False)
-                event_list = [booking.event for booking in booking_queryset]
+                booking_list = Booking.objects.filter(is_approved_pri=False)
             elif faculty_obj.is_hod:
-                booking_queryset = Booking.objects.filter(is_approved_hod=False)
-                event_list = [booking.event for booking in booking_queryset]
+                booking_list = Booking.objects.filter(is_approved_hod=False)
             elif faculty_obj.is_mentor:
-                booking_queryset = Booking.objects.filter(is_approved_mentor=False)
-                event_list = [booking.event for booking in booking_queryset]
+                booking_list = Booking.objects.filter(is_approved_mentor=False)
             elif faculty_obj.is_dean:
-                booking_queryset = Booking.objects.filter(is_approved_dean=False)
-                event_list = [booking.event for booking in booking_queryset]
+                booking_list = Booking.objects.filter(is_approved_dean=False)
 
-            # Serialize the events
-            serializer = self.serializer_class(event_list, many=True)
-            return Response({'event_list': serializer.data})
-        except (Faculty.DoesNotExist, Event.DoesNotExist, Booking.DoesNotExist) as e:
+            # Serialize the bookings
+            serializer = self.serializer_class(booking_list, many=True)
+            return Response({'booking_list': serializer.data})
+        except (Faculty.DoesNotExist, Booking.DoesNotExist) as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    queryset = Event.objects.filter(is_rejected=False , is_approved=False)
-    serializer_class = EventSerializerAll
+    queryset = Booking.objects.all()  # Change this to your Booking queryset
+    serializer_class = BookingSerializer  # Change this to your Booking serializer
 
 
-class DisplayEvent(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializerAll
+class DisplayEvent(APIView):
+    def post(self, request):
+        # Get the date from the request body
+        date = request.data.get('date')
 
+        # Find all booking objects having the same date
+        bookings = Booking.objects.filter(date=date)
 
-class DispDelEvent(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
+        # Serialize the booking objects
+        serialized_bookings = BookingSerializer(bookings, many=True)
+
+        # Return the serialized booking objects
+        return Response(serialized_bookings.data, status=status.HTTP_200_OK)
+
+class DisplayEventDetails(APIView):
+    def get(self, request, pk, format=None):
+        event = get_object_or_404(Booking, pk=pk)
+        serializer = BookingSerializer(event)
+        return Response(serializer.data)
+
+from rest_framework import generics
+
+class DispDelEvent(mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
 
 class DisplayCommittee(viewsets.ModelViewSet):
     queryset = Committee.objects.all()
