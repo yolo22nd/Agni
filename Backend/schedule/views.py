@@ -148,18 +148,24 @@ def approval(request):
     if faculty_obj.is_principle == True:
         if not booking_obj.is_approved_pri:
             booking_obj.is_approved_pri = True
+            print("approved by pri")
 
-    if faculty_obj.is_hod == True:
+    elif faculty_obj.is_hod == True:
         if not booking_obj.is_approved_hod:
             booking_obj.is_approved_hod = True
+            print("approved by hod")
 
-    if faculty_obj.is_mentor == True:
+    elif faculty_obj.is_mentor == True:
         if not booking_obj.is_approved_mentor:
             booking_obj.is_approved_mentor = True
+            print("approved by mentor")
         
-    if faculty_obj.is_dean == True:
+    elif faculty_obj.is_dean == True:
         if not booking_obj.is_approved_dean:
             booking_obj.is_approved_dean = True
+            print("approved by dean")
+
+    booking_obj.save()
 
     # Check if the booking is approved by all four types of faculties
     if booking_obj.is_approved_pri and booking_obj.is_approved_hod and booking_obj.is_approved_mentor and booking_obj.is_approved_dean:
@@ -168,16 +174,17 @@ def approval(request):
         booking_obj.save()
 
         # Create a new Event object
-        event = Event(name=event_name, booking=booking_obj)
+        committee = Committee.objects.get(name=booking_obj.committee.name)
+        event = Event.objects.create(name=event_name,committee=booking_obj.committee,venue=booking_obj.venue,type=booking_obj.type,desc=booking_obj.desc,date=booking_obj.date,time=booking_obj.time,image=booking_obj.image)
         event.save()
 
         # Send an email to the committee
-        committee = Committee.objects.get(user=booking_obj.user)
         subject = 'Your event has been approved'
         message = f'Your event "{event_name}" has been approved by all the faculties and it is successfully scheduled. \n All the students can start with the registrations now.'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [committee.email]
         send_mail(subject, message, email_from, recipient_list)
+        # send_mail("this is subject","this is message",email_from,[committee.email])
 
     return JsonResponse({'message' : 'Event approved successfully'})
 

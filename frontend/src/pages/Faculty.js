@@ -163,6 +163,8 @@ async function approveAll() {
     let data = await response.data
     console.log(response)
     console.log(data)
+    getPendingEvents()
+    getPreviousEvents()
 
   
   }
